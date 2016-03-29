@@ -13,11 +13,12 @@
 1459263116 source:c:\users\areax\documents\git\connect4\connect4\con4lib.c
 	"con4lib.h"
 
-1459263116 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
+1459265794 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
 	<stdlib.h>
 	"con4lib.h"
 	"arupsoldplayer.h"
 	"firstavailable.h"
+	"ourplayer.h"
 
 1459263116 c:\users\areax\documents\git\connect4\connect4\firstavailable.h
 	"con4lib.h"
@@ -29,8 +30,11 @@
 	<stdio.h>
 	<stdlib.h>
 
-1459265462 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+1459265787 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
 	<stdio.h>
 	<stdlib.h>
+	"con4lib.h"
+
+1459265782 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
 	"con4lib.h"
 

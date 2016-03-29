@@ -65,7 +65,7 @@ int main() {
 
 	        // Time and retrieve the current computer player's move.
 	        timespent = time(0);
-            curmove = ourplayer(&game, Ytime);
+            curmove = moving(&game, Ytime);
 	        timespent = time(0) - timespent;
 	        printf("O, have chosen column %d\n", curmove);
 	        Ytime -= timespent;
