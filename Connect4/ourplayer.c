@@ -45,9 +45,18 @@ posInfo* checkscore(char board[6][7], char team)
     }
 }
 
-int score (char board[6][7], char team)
+int score (char board[6][7], char team, connect4 *game)
 {
-    return 0;
+    int total;
+    int boardStatus;
+
+    boardStatus
+
+
+    // If all four are in a rows
+
+
+    return total;
 }
 
 int chk_status(char board[][NUM_COLS])
@@ -60,7 +69,7 @@ int moving(const struct connect4 *game, int secondsLeft)
     //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
     int i = 0;
 
-    posInfo scoreInfo;
+    int bestMove;
     char boardCopy[NUM_ROWS][NUM_COLS];
 
     // Get a copy of the  current board.
@@ -72,16 +81,7 @@ int moving(const struct connect4 *game, int secondsLeft)
         }
     }
 
-    scoreInfo = checkscore(boardCopy[][7], team);
+    bestMove = checkscore(boardCopy[][7], team);
 
-    move = scoreInfo.yPos;
-    return move;
-}
-
-posInfo makeNode(int xPos, int yPos)
-{
-    posInfo temp;
-    temp.xPos = xPos;
-    temp.yPos = yPos;
-    return temp;
+    return bestMove;
 }
