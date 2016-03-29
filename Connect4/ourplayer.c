@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "con4lib.h"
 
-int move(const struct connect4 *game)
+
+int move(const struct connect4 *game, int secondsLeft)
 {
     int i;
     for(i=0;i<NUM_COLS;i++)
