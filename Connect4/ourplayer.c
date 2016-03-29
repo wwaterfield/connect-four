@@ -42,7 +42,6 @@ int moving(const struct connect4 *game, int secondsLeft)
 {
     //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
     int i = 0;
-    int i;
 
     char boardCopy[NUM_ROWS][NUM_COLS];
 
@@ -54,11 +53,19 @@ int moving(const struct connect4 *game, int secondsLeft)
             boardCopy[i][j] = game->board[i][j];
         }
     }
-    return i;
+
+    return move;
 }
 
-posInfo makeInfoNode(int xPos, int yPos, int score)
+posInfo *makeInfoNode(int xPos, int yPos, int score)
 {
+    posInfo *newNode = malloc(sizeof(posInfo));
+
+    newNode->xPos = xPos;
+    newNode->yPos = yPos;
+    newNode->score = score;
+
+    return newNode;
 
 }
 
