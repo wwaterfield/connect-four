@@ -1,14 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "con4lib.h"
 
-<<<<<<< HEAD
-int main(void) 
+
+int move(const struct connect4 *game)
 {
+    int i;
+    for(i=0;i<NUM_COLS;i++)
+    {
+        if(game->board[NUM_ROWS-1][i] == '_')
+            return i;
+    }
+}
 
+
+int main(void)
+{
+	move;
 	return 0;
-=======
-void piece_of_trash(void)
-{
-    printf("hey sometimes I can't");
->>>>>>> 9b6c6ce8bb4c57659a96dab9fccfc5c010148740
 }
