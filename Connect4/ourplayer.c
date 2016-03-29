@@ -43,6 +43,7 @@ int moving(const struct connect4 *game, int secondsLeft)
     //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
     int i = 0;
 
+    posInfo scoreInfo;
     char boardCopy[NUM_ROWS][NUM_COLS];
 
     // Get a copy of the  current board.
@@ -54,6 +55,9 @@ int moving(const struct connect4 *game, int secondsLeft)
         }
     }
 
+    scoreInfo = checkscore(boardCopy[][7], team);
+
+    move = scoreInfo.yPos;
     return move;
 }
 
