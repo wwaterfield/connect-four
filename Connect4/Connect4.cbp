@@ -31,9 +31,25 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="arupsoldplayer.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="arupsoldplayer.h" />
+		<Unit filename="con4lib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="con4lib.h" />
+		<Unit filename="connect4.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="firstavailable.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="firstavailable.h" />
+		<Unit filename="ourplayer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ourplayer.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
