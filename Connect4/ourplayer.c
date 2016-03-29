@@ -5,6 +5,11 @@
 #define LOSE -1000;
 #define WIN 1000;
 
+typedef struct posInfo {
+    int xPos;
+    int yPos;
+    int score;
+} posInfo;
 
 int score (char board[6][7], char team)
 {
@@ -28,12 +33,6 @@ int moving(const struct connect4 *game, int secondsLeft)
     int i;
 
     char boardCopy[NUM_ROWS][NUM_COLS];
-    /*
-    for(i=0;i<NUM_COLS;i++)
-    {
-        if(game->board[NUM_ROWS-1][i] == '_')
-            return i;
-    } */
 
     // Get a copy of the  current board.
     for (i = 0; i < NUM_ROWS; i++)
@@ -43,6 +42,11 @@ int moving(const struct connect4 *game, int secondsLeft)
             boardCopy[i][j] = game->board[i][j];
         }
     }
-
     return i;
 }
+
+posInfo makeInfoNode(int xPos, int yPos, int score)
+{
+
+}
+
