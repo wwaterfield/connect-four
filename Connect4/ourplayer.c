@@ -8,12 +8,22 @@
 
 int score (char board[6][7], char team)
 {
-    int us;
+    int us, i, j;
+    //this is just knowing what player we are???
     if(team == PLAYERONE)
         us = 1;
     else us = 0;
+    //end player
 
     total = 0;
+
+    for(i=0;i<6;i++)
+    {
+        for(j=0;j<7;j++)
+        {
+
+        }
+    }
 
     return 0;
 }
@@ -25,6 +35,7 @@ int chk_status(char board[][NUM_COLS])
 
 int moving(const struct connect4 *game, int secondsLeft)
 {
+    //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
     int i = 0;
     for(i=0;i<NUM_COLS;i++)
     {
