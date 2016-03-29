@@ -2,8 +2,10 @@
 #include <stdlib.h>
 
 #include "con4lib.h"
+
 #define LOSE -1000;
 #define WIN 1000;
+#define COL_SIZE 7;
 
 typedef struct posInfo {
     int xPos;
@@ -14,21 +16,36 @@ typedef struct posInfo {
 posInfo* checkscore(char board[6][7], char team)
 {
     int us, i, j;
+    posInfo BestMove;
+    posInfo curMove;
     //this is just knowing what player we are???
     if(team == PLAYERONE)
         us = 1;
     else us = 0;
-    total = 0;
+    //I have no way to decide what player otherwise
+
+    int tscore = -1000;
+    BestMove = makeNode(0, 0);
     for(i=0;i<6;i++)
     {
         for(j=0;j<7;j++)
         {
-            if
+            curMove = makeNode(i, j)
+            curMove = score(board, curMove);
+
+            if(BestMove.score <= tscore)
+            {
+                BestMove.xPos = i;
+                BestMove.yPos = j;
+                BestMove.score = tscore;
+            }
+
+
         }
     }
 }
 
-int score (char board[6][7], posInfo* node)
+int score (char board[6][7], char team)
 {
     return 0;
 }
@@ -57,8 +74,11 @@ int moving(const struct connect4 *game, int secondsLeft)
     return i;
 }
 
-posInfo makeInfoNode(int xPos, int yPos, int score)
+posInfo makeNode(int xPos, int yPos)
 {
-
+    posInfo temp;
+    temp.xPos = xPos;
+    temp.yPos = yPos;
+    return temp;
 }
 
