@@ -7,45 +7,34 @@
 #define WIN 1000;
 #define COL_SIZE 7;
 
-typedef struct posInfo {
-    int xPos;
-    int yPos;
-    int score;
-} posInfo;
-
-posInfo* checkscore(char board[6][7], char team)
+int checkscore(char board[6][7], char team)
 {
     int us, i, j;
-    posInfo BestMove;
-    posInfo curMove;
+
     //this is just knowing what player we are???
     if(team == PLAYERONE)
         us = 1;
     else us = 0;
     //I have no way to decide what player otherwise
-
     int tscore = -1000;
-    BestMove = makeNode(0, 0);
-    for(i=0;i<6;i++)
+    int highscore;
+    int yPos;
+    for(j=0;j<7;j++)
     {
-        for(j=0;j<7;j++)
-        {
-            curMove = makeNode(i, j)
-            curMove = score(board, curMove);
+        tscore = score(board, j);
 
-            if(BestMove.score <= tscore)
-            {
-                BestMove.xPos = i;
-                BestMove.yPos = j;
-                BestMove.score = tscore;
-            }
+        if(total <= tscore)
+        {
+            yPos = j;
+            highscore = tscore;
+        }
 
 
         }
     }
 }
 
-int score (char board[6][7], char team)
+int score (char board[6][7], posInfo temp)
 {
     return 0;
 }
