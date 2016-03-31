@@ -2,59 +2,53 @@
 #include <stdlib.h>
 
 #include "con4lib.h"
-
-#define LOSE -1000;
-#define WIN 1000;
-#define COL_SIZE 7;
-#define RUNS 4;
-
-int checkscore(const struct connect4* game)
+#include "ourplayer.h"
+int checkscore(struct connect4* copy, char team)
 {
-    int i, j;
+    int j;
 
     int tscore = -1000;
-    int highscore;
+    int highscore = -1000;
     int yPos;
-
-    char boardCopy[NUM_ROWS][NUM_COLS];
-
-    // Get a copy of the  current board.
-    for (i = 0; i < NUM_ROWS; i++)
-    {
-        for (j = 0; j < NUM_COLS; j++)
-        {
-            boardCopy[i][j] = game->board[i][j];
-        }
-    }
 
 
     for(j=0;j<7;j++)
     {
-        tscore = score(boardCopy, j, team, game->whoseTurn);
-        if(total <= tscore)
+        tscore = findscore(copy, j, team);
+        if(highscore <= tscore)
         {
             yPos = j;
             highscore = tscore;
         }
     }
+    return yPos;
 }
 
-int score (char board[6][7], int column, char tpiece, char ourpiece)
+int findscore (struct connect4* copy, int column, char ourpiece)
 {
     int total = -1000;
-    board[get_row(&board, column)][column] = tpiece;
-    int status = check_status(&board);
+    char tpiece = copy->whoseTurn;
+    copy->board[get_row(copy, column)][column] = tpiece;
+    int status = check_status(copy);
     //checks four cases: if we placed the piece and we win or not
     //the win case will trigger when we place a piece
     //the lose case will trigger when the hypothetical opponent places a piece
     if(status == X_WINS && ourpiece == tpiece)
+    {
         return WIN;
+    }
     else if(status == X_WINS && ourpiece != tpiece)
+    {
         return LOSE;
+    }
     else if(status == O_WINS && ourpiece == tpiece)
+    {
         return WIN;
+    }
     else if(status == O_WINS && ourpiece != tpiece)
+    {
         return LOSE;
+    }
 
     //if() here and see if we get 2 pieces! high-ish score
     //make sure that if we go in the middle we get more points
@@ -70,11 +64,26 @@ int score (char board[6][7], int column, char tpiece, char ourpiece)
 
 int test_depth(const struct connect4 *game)
 {
-    int i;
+    int i, j;
     int bestmove;
+
+    struct connect4 copy;
+    copy.board[NUM_ROWS][NUM_COLS];
+
+    // Get a copy of the  current board.
+    for (i = 0; i < NUM_ROWS; i++)
+    {
+        for (j = 0; j < NUM_COLS; j++)
+        {
+            copy.board[i][j] = game->board[i][j];
+        }
+    }
+    copy.whoseTurn = game->whoseTurn;
+
     for(i=0;i<RUNS;i++)
     {
-        bestmove = checkscore(game);
+        bestmove = checkscore(&copy, game->whoseTurn);
+        copy.whoseTurn = !copy.whoseTurn;
     }
 
     return bestmove;
@@ -83,7 +92,6 @@ int test_depth(const struct connect4 *game)
 int moving(const struct connect4 *game, int secondsLeft)
 {
     //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
-    int i = 0;
 
     int bestMove;
 
