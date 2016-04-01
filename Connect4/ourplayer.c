@@ -14,8 +14,9 @@ int checkscore(struct connect4* copy, char team)
 
     for(j=0;j<7;j++)
     {
-        tscore = findscore(copy, j, team);
-        if(highscore <= tscore)
+        int row = get_row(copy, j);
+        tscore = findscore(copy, j, team, row);
+        if(highscore <= tscore && row < NUM_ROWS && copy->board[row][j] == '_')
         {
             yPos = j;
             highscore = tscore;
@@ -24,31 +25,33 @@ int checkscore(struct connect4* copy, char team)
     return yPos;
 }
 
-int findscore (struct connect4* copy, int column, char ourpiece)
+int findscore (struct connect4* copy, int column, char ourpiece, int row)
 {
     int total = -1000;
     char tpiece = copy->whoseTurn;
-    copy->board[get_row(copy, column)][column] = tpiece;
+    copy->board[row][column] = tpiece;
     int status = check_status(copy);
+
+
+
+    //DX DY array, if it's an open position, is it considered better or worse than not?
+    //check to see if there's less then three open positions from up or down and decide
+    //if going here is good or not
+    if(column == 2 || column == 3)
+        total += 50;
+
     //checks four cases: if we placed the piece and we win or not
     //the win case will trigger when we place a piece
     //the lose case will trigger when the hypothetical opponent places a piece
+
     if(status == X_WINS && ourpiece == tpiece)
-    {
-        return WIN;
-    }
+        total = WIN;
     else if(status == X_WINS && ourpiece != tpiece)
-    {
-        return LOSE;
-    }
+        total = LOSE;
     else if(status == O_WINS && ourpiece == tpiece)
-    {
-        return WIN;
-    }
+        total = WIN;
     else if(status == O_WINS && ourpiece != tpiece)
-    {
-        return LOSE;
-    }
+        total = LOSE;
 
     //if() here and see if we get 2 pieces! high-ish score
     //make sure that if we go in the middle we get more points
@@ -58,6 +61,9 @@ int findscore (struct connect4* copy, int column, char ourpiece)
     //we might split up scoring into the opponent's scoring feature and ours.  That way
     //we can go ahead and have 2 if statements per move...
     //either one works?
+
+
+    copy->board[row][column] = '_';
 
     return total;
 }
@@ -80,7 +86,7 @@ int test_depth(const struct connect4 *game)
     }
     copy.whoseTurn = game->whoseTurn;
 
-    for(i=0;i<RUNS;i++)
+    for(i=0;i<1;i++)
     {
         bestmove = checkscore(&copy, game->whoseTurn);
         copy.whoseTurn = !copy.whoseTurn;
