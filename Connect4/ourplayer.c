@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "con4lib.h"
 #include "ourplayer.h"
+
 int checkscore(struct connect4* copy, char team)
 {
     int j;
