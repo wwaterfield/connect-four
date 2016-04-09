@@ -5,24 +5,31 @@
 
 int checkscore(struct connect4* copy, char team)
 {
-    int column;
+    //base case
+
     int tscore = -1000;
     int highscore = -1000;
     int yPos;
-
-    for(column=0;column<7;column++)
-    {
-        int row = get_row(copy, column);
-        if(not_valid(copy,column) == 0)
-            continue;
-
-        tscore = findscore(copy, column, row);
-        if(highscore <= tscore && row < NUM_ROWS)
+    tscore = findscore(copy, column, row);
+    if(highscore <= tscore && row < NUM_ROWS)
         {
             yPos = column;
             highscore = tscore;
         }
+
+
+    int column;
+    for(column=0;column<7;column++)
+    {
+        //get the row for the column
+        int row = get_row(copy, column);
+        //if row isn't valid, move on
+        if(not_valid(copy,column) == 0)
+            continue;
+        //if the score is higher, save that position
+
     }
+    //here we're going to return the top 3 moves.
     return yPos;
 }
 
