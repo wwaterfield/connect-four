@@ -109,13 +109,17 @@ int test_depth(const struct connect4 *game)
 
         int row = get_row(&copy, bestmove[i]);
         copy.board[row][bestmove[i]] = copy.whoseTurn;
+
+        //accidentally hardcoded for now
+        if(i<2)
+            if(check_status(&copy) == X_WINS)
+                return bestmove[i];
         print_board(&copy);
 
         if(copy.whoseTurn == 'X')
             copy.whoseTurn = 'O';
         else copy.whoseTurn = 'X';
-        if(i == 1 && bestmove[i] == -1000)
-            return bestmove[i];
+
     }
 
     return bestmove[0];
