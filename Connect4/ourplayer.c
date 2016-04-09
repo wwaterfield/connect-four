@@ -23,6 +23,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         int fakescore = findscore(copied, BestScore);
         BestScore.score = fakescore;
         BestScore.column = column;
+        if(column==0)
+                finalsay = BestScore;
         /*printf("score: %d  vs BestScore: %d\n", comparedscore, BestScore.score);
         if(comparedscore > BestScore.score && turnour == 0)
             BestScore.score = comparedscore;
@@ -35,12 +37,10 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
             printf("score2.0: %d finalscore: %d\n", temp.score, finalsay.score);
-            if(column==0)
-                finalsay = BestScore;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
-           printf("tempscore: %d, finalscore: %d \n", temp.score, finalsay.score);
+           printf("tempscore: %d vs finalscore: %d \n", temp.score, finalsay.score);
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
