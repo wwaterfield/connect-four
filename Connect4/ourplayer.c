@@ -25,11 +25,15 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         BestScore.column = column;
         if(column==0)
                 finalsay = BestScore;
-        /*printf("score: %d  vs BestScore: %d\n", comparedscore, BestScore.score);
-        if(comparedscore > BestScore.score && turnour == 0)
-            BestScore.score = comparedscore;
-        else if(comparedscore < BestScore.score && turnour == 1)
-            BestScore.score = comparedscore;*/
+
+        if(k == DEPTH)
+        {
+            printf("score: %d  vs BestScore: %d\n", finalsay.score, BestScore.score);
+            if(finalsay.score < BestScore.score && turnour == 0)
+                finalsay.score = BestScore.score;
+            else if(finalsay.score > BestScore.score && turnour == 1)
+                finalsay.score = BestScore.score;
+        }
 
         //RECURSION
         if(k != DEPTH)
