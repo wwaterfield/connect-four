@@ -16,7 +16,7 @@ int checkscore(struct connect4* copy, char team)
     {
         int row = get_row(copy, j);
         tscore = findscore(copy, j, team, row);
-        if(highscore <= tscore && row < NUM_ROWS && copy->board[row][j] == '_')
+        if(highscore <= tscore && row < NUM_ROWS && not_valid(copy,j) == 0)
         {
             yPos = j;
             highscore = tscore;
@@ -37,9 +37,23 @@ int findscore (struct connect4* copy, int column, char ourpiece, int row)
     //DX DY array, if it's an open position, is it considered better or worse than not?
     //check to see if there's less then three open positions from up or down and decide
     //if going here is good or not
-    if(column == 2 || column == 3)
+    //check if this is the first move I suppose- good to know
+    if(column == 3)
         total += 50;
 
+
+    if(row+1 < ROW_SIZE)
+        if(copy->board[row+1][column] == ourpiece || copy->board[row+1][column] == tpiece)
+            total+=100;
+    if(row+1 < ROW_SIZE)
+        if(copy->board[row-1][column] == ourpiece || copy->board[row-1][column] == tpiece)
+            total+=100;
+    if(row+1 < ROW_SIZE)
+        if(copy->board[row][column+1] == ourpiece || copy->board[row][column+1] == tpiece)
+            total+=100;
+    if(row+1 < ROW_SIZE)
+        if(copy->board[row][column-1] == ourpiece || copy->board[row][column-1] == tpiece)
+            total+=100;
     //checks four cases: if we placed the piece and we win or not
     //the win case will trigger when we place a piece
     //the lose case will trigger when the hypothetical opponent places a piece

@@ -115,10 +115,10 @@ int main() {
         printf("Time left for player two: %d seconds\n", Ytime);
         status = check_status(&game);
 
-        /*** Uncomment this if you want to wait for 2 seconds.
+
         timespent = time(0);
         while (time(0)-timespent < DISPLAY_WAIT_TIME);
-        ***/
+
 
         print_board(&game);
 

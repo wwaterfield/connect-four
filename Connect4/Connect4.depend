@@ -27,22 +27,22 @@
 1459961756 source:c:\users\dmarino\desktop\connect4\arupsoldplayer.c
 	"arupsoldplayer.h"
 
-1460217958 source:c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.c
+1460218424 source:c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.c
 	"arupsoldplayer.h"
 
-1460217958 c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.h
+1460218424 c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.h
 	"con4lib.h"
 
-1460217958 c:\users\areax\documents\git\connect4\connect4\con4lib.h
+1460218424 c:\users\areax\documents\git\connect4\connect4\con4lib.h
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
 	<time.h>
 
-1460217958 source:c:\users\areax\documents\git\connect4\connect4\con4lib.c
+1460218424 source:c:\users\areax\documents\git\connect4\connect4\con4lib.c
 	"con4lib.h"
 
-1460218331 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
+1460218531 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
 	<stdlib.h>
 	<stdio.h>
 	"con4lib.h"
@@ -50,17 +50,17 @@
 	"firstavailable.h"
 	"ourplayer.h"
 
-1460217958 c:\users\areax\documents\git\connect4\connect4\firstavailable.h
+1460218424 c:\users\areax\documents\git\connect4\connect4\firstavailable.h
 	"con4lib.h"
 
-1460217958 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
+1460218424 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
 
-1459535653 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+1460220574 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
 	<stdio.h>
 	<stdlib.h>
 	"ourplayer.h"
 
-1459535420 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
+1460220088 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
 	"con4lib.h"
 

@@ -4,6 +4,7 @@
 #define LOSE -1000
 #define WIN 1000
 #define COL_SIZE 7
+#define ROW_SIZE 6
 #define RUNS 4
 
 
