@@ -26,7 +26,12 @@ int checkscore(struct connect4* copied, BScore BestScore, int k)
             BestScore.score = tscore;
         }
         if(k != DEPTH)
+        {
+            if(turnour)
+                copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             checkscore(copied, BestScore, k+1);
+            copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
+        }
         int comparedscore = findscore(copied, BestScore);
         //our turn
         if(turnour)
