@@ -34,25 +34,46 @@ int checkscore(struct connect4* copy, char team)
     return yPos;
 }
 
-int findscore (struct connect4* copy, int column, int row, int score, char ourpiece)
+int dxdyEval(struct connect4 *copy, int row, int column, int i, int k)
+{
+
+	char currentPos = copy->board[row + DX[i]][column + DY[i]];
+
+	if (column > NUM_COLS || row > NUM_ROWS || column < 0 || row < 0)
+		return pow(5, k-1);
+
+	if (k == 1 && currentPos != copy->whoseTurn && currentPos != '_')
+		return 120;
+
+	if (currentPos == copy->whoseTurn)
+		return dxdyEval(copy, row+DX[i], column+DY[i], i, k+1);
+
+	return pow(5, k);
+
+}
+
+int findscore (struct connect4* copy, int row, int column int score, char ourpiece)
 {
 
     int status = check_status(&copy);
-
+    int i;
     char currentPiece = copy->whoseTurn;
 
+    for (i = 0; i < DX_SIZE; i++)
+    {
+    	newRow = row + DX[i];
+    	newCol = column + DY[i];
+
+    	currentPos = copy->board[newRow][newCol];
+
+    	score  = dxdyEval(copy, newRow, newCol, i, 1);
+    }
+
+
     if (currentPiece = 'X' && (status == X_WINS || status == O_WINS))
-    	total = 1000;
+    	score = 1000;
     if (currentPiece = 'O' && (status == O_WINS || status == X_WINS))
-    	total += 1000;
-
-    if (copy->board[row][column-1] == currentPiece)
-    	total += 50
-
-
-    if (copy->board[row][column-1] == copy->whoseTurn)
-
-    copy->board[row][column] = '_';
+    	score = 1000;
 
     if (ourPiece == copy->whoseTurn)
     	return total;

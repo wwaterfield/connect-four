@@ -1,5 +1,6 @@
 #ifndef CON4
 #include "con4lib.h"
+#include <math.>
 
 #define LOSE -1000
 #define WIN 1000
