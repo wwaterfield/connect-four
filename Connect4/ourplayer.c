@@ -3,22 +3,12 @@
 
 #include "ourplayer.h"
 
-int checkscore(struct connect4* copy, char team)
+int checkscore(struct connect4* copy, int row, int column, int score, char ourpiece, int k)
 {
-    //base case
+    int yPos, column;
+    int highscore, comparedscore;
+    int turnour = k % 2;
 
-    int tscore = -1000;
-    int highscore = -1000;
-    int yPos;
-    tscore = findscore(copy, column, row);
-    if(highscore <= tscore && row < NUM_ROWS)
-        {
-            yPos = column;
-            highscore = tscore;
-        }
-
-
-    int column;
     for(column=0;column<7;column++)
     {
         //get the row for the column
@@ -26,48 +16,50 @@ int checkscore(struct connect4* copy, char team)
         //if row isn't valid, move on
         if(not_valid(copy,column) == 0)
             continue;
-        //if the score is higher, save that position
+        //place piece, find score, if highscore then save it
+        copy->board[row][column] = copy->whoseTurn;
+        tscore = findscore(copy, row, column);
+        if(highscore <= tscore)
+        {
+            yPos = column;
+            highscore = tscore;
+        }
+        if(k != DEPTH)
+            checkscore(copy, k+1, column, row);
+        int comparedscore = findscore(copy);
+        //our turn
+        if(turnour)
+        {
+            if(highscore < comparedscore)
+                highscore = comparedscore;
+        }
+        else if(highscre > comparedscore)
+            highscore = comparedscore;
+
+
+        copy->board[row][column] = '_';
 
     }
     //here we're going to return the top 3 moves.
     return yPos;
 }
 
-int findscore (struct connect4* copy, int column, int row)
+int findscore (struct connect4* copy, int column, int row, int score, char ourpiece)
 {
     int total = -1000;
-    copy->board[row][column] = copy->whoseTurn;
-
-    copy->board[row][column] = '_';
     return total;
 }
 
-struct connect4 createStruct(const struct connect4* game)
-{
-    int i,j;
-    struct connect4 copy;
-    copy.board[NUM_ROWS][NUM_COLS];
-    // Get a copy of the  current board.
-    for (i = 0; i < NUM_ROWS; i++)
-    {
-        for (j = 0; j < NUM_COLS; j++)
-        {
-            copy.board[i][j] = game->board[i][j];
-        }
-    }
-    copy.whoseTurn = game->whoseTurn;
-    return copy;
-}
 
 int test_depth(const struct connect4 *game)
 {
     int i;
     int bestmove;
-    struct connect4 copy = createStruct(game);
+    struct connect4 copy = copy(game);
 
     //get the best move of the 7
-    for(i=0;i<RUNS;i++)
-        bestmove = checkscore(&copy, copy.whoseTurn);
+    //check for integer best move?
+        bestmove = checkscore(&copy, 0);
 
     return bestmove;
 }
