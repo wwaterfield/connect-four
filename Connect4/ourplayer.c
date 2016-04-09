@@ -33,7 +33,7 @@ int checkscore(struct connect4* copy, BScore BestScore, int k)
             if(highscore < comparedscore)
                 highscore = comparedscore;
         }
-        else if(highscre > comparedscore)
+        else if(highscore > comparedscore)
             highscore = comparedscore;
 
 
@@ -68,7 +68,7 @@ int findscore (struct connect4* copy, BScore BestScore)
     int status = check_status(&copy);
     int i;
     char currentPiece = copy->whoseTurn;
-    iBestScore->score
+    BestScore->score;
 
     for (i = 0; i < DX_SIZE; i++)
     {
