@@ -4,10 +4,11 @@
 #include "ourplayer.h"
 
 
-int checkscore(struct connect4* copied, BScore BestScore, int k)
+BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 {
-    int column, comparedscore, tscore;
+    int column;
     int turnour = k % 2;
+    BScore finalsay = initstruct(copied);
 
     for(column=0;column<7;column++)
     {
@@ -18,36 +19,45 @@ int checkscore(struct connect4* copied, BScore BestScore, int k)
             continue;
         //place piece, find score, if highscore then save it
         copied->board[row][column] = copied->whoseTurn;
-        tscore = findscore(copied, BestScore);
-        printf("score: %d", tscore);
-        if(BestScore.score <= tscore)
-        {
-            BestScore.column = column;
-            BestScore.score = tscore;
-        }
+
+        int comparedscore = findscore(copied, BestScore);
+        if(comparedscore > BestScore.score && turnour)
+            BestScore.score = comparedscore;
+        else if(comparedscore < BestScore.score && !turnour)
+            BestScore.score = comparedscore;
+
+        //RECURSION
         if(k != DEPTH)
         {
-            if(turnour)
-                copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
-            checkscore(copied, BestScore, k+1);
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
-        }
-        int comparedscore = findscore(copied, BestScore);
-        //our turn
-        if(turnour)
-        {
-            if(BestScore.score < comparedscore)
-                BestScore.score = comparedscore;
-        }
+            BScore temp = checkscore(copied, BestScore, k+1);
+            if(column==0)
+                finalsay = temp;
+            copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
-        else if(BestScore.score > comparedscore)
-            BestScore.score = comparedscore;
+            //our turn
+            if(turnour == 0)
+            {
+                if(finalsay.score < temp.score)
+                {
+                    finalsay.score = temp.score;
+                    finalsay.column = column;
+                }
+
+            }
+            else if(finalsay.score > temp.score)
+            {
+                finalsay.score = temp.score;
+                finalsay.column = column;
+            }
+        }
+        printf("score: %d  ", comparedscore);
 
         printf(" BestScore: %d\n", BestScore.score);
         copied->board[row][column] = '_';
 
     }
-    return BestScore.column;
+    return finalsay;
 }
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
@@ -79,10 +89,7 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-
-    	int currentPos = copied->board[newRow][newCol];
-
-    	BestScore.score  = dxdyEval(copied, newRow, newCol, i, 1);
+    	BestScore.score  += dxdyEval(copied, newRow, newCol, i, 1);
     }
 
 
@@ -98,8 +105,18 @@ int findscore (struct connect4* copied, BScore BestScore)
     if (BestScore.ourpiece == copied->whoseTurn)
     	return BestScore.score;
     else
-    	return (BestScore.score);
+    	return -(BestScore.score);
 
+}
+
+BScore initstruct(const struct connect4* game)
+{
+    BScore BestScore;
+    BestScore.row = 1;
+    BestScore.column = 1;
+    BestScore.score = 0;
+    BestScore.ourpiece = game->whoseTurn;
+    return BestScore;
 }
 
 int test_depth(const struct connect4 *game)
@@ -109,13 +126,9 @@ int test_depth(const struct connect4 *game)
 
     //get the best move of the 7
     //check for integer best move?
-    BScore BestScore;
-    BestScore.row = 0;
-    BestScore.column = 0;
-    BestScore.score = 0;
-    BestScore.ourpiece = game->whoseTurn;
+    BScore node = initstruct(game);
 
-        bestmove = checkscore(copied, BestScore, 0);
+     bestmove = checkscore(copied, node, 0).column;
 
     return bestmove;
 }
