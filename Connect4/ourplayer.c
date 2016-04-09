@@ -3,6 +3,7 @@
 
 #include "ourplayer.h"
 
+
 int checkscore(struct connect4* copy, char team)
 {
     //base case
@@ -33,13 +34,30 @@ int checkscore(struct connect4* copy, char team)
     return yPos;
 }
 
-int findscore (struct connect4* copy, int column, int row)
+int findscore (struct connect4* copy, int column, int row, int score, char ourpiece)
 {
-    int total = -1000;
-    copy->board[row][column] = copy->whoseTurn;
+
+    int status = check_status(&copy);
+
+    char currentPiece = copy->whoseTurn;
+
+    if (currentPiece = 'X' && (status == X_WINS || status == O_WINS))
+    	total = 1000;
+    if (currentPiece = 'O' && (status == O_WINS || status == X_WINS))
+    	total += 1000;
+
+    if (copy->board[row][column-1] == currentPiece)
+    	total += 50
+
+
+    if (copy->board[row][column-1] == copy->whoseTurn)
 
     copy->board[row][column] = '_';
-    return total;
+
+    if (ourPiece == copy->whoseTurn)
+    	return total;
+    else
+    	return = -total;
 }
 
 struct connect4 createStruct(const struct connect4* game)
@@ -57,6 +75,15 @@ struct connect4 createStruct(const struct connect4* game)
     }
     copy.whoseTurn = game->whoseTurn;
     return copy;
+}
+
+int hasThreeInARow(const struct connect4 *game)
+{
+	int DX[] = {0, -1, 0, 1};
+	int DY[] = {-1, 0, 1, 0};
+
+
+
 }
 
 int test_depth(const struct connect4 *game)
