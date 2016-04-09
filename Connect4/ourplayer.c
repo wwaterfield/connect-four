@@ -22,6 +22,7 @@ int checkscore(struct connect4* copy, char team)
         {
             yPos = j;
             highscore = tscore;
+            printf("new score: %d, new position: %d\n", highscore, yPos);
         }
     }
     return yPos;
@@ -41,33 +42,27 @@ int findscore (struct connect4* copy, int column, char ourpiece, int row)
     //if going here is good or not
     //check if this is the first move I suppose- good to know
     if(column == 3)
-        total += 50;
+        total += 150;
 
 
     if(row+1 < NUM_ROWS)
-        if(copy->board[row+1][column] == ourpiece || copy->board[row+1][column] == tpiece)
-            total+=100;
-    if(row+1 < NUM_ROWS)
-        if(copy->board[row-1][column] == ourpiece || copy->board[row-1][column] == tpiece)
-            total+=100;
-    if(row+1 < NUM_ROWS)
-        if(copy->board[row][column+1] == ourpiece || copy->board[row][column+1] == tpiece)
-            total+=100;
-    if(row+1 < NUM_ROWS)
-        if(copy->board[row][column-1] == ourpiece || copy->board[row][column-1] == tpiece)
-            total+=100;
+        if(copy->board[row+1][column] != '_')
+            total+=10;
+    if(row-1 >= 0)
+        if(copy->board[row-1][column] != '_')
+            total+=10;
+    if(column+1 < NUM_COLS)
+        if(copy->board[row][column+1] != '_')
+            total+=500;
+    if(column-1 >= 0)
+        if(copy->board[row][column-1] != '_')
+            total+=500;
     //checks four cases: if we placed the piece and we win or not
     //the win case will trigger when we place a piece
     //the lose case will trigger when the hypothetical opponent places a piece
 
-    if(status == X_WINS && ourpiece == tpiece)
+    if(status == X_WINS || status == O_WINS)
         total = WIN;
-    else if(status == X_WINS && ourpiece != tpiece)
-        total = LOSE;
-    else if(status == O_WINS && ourpiece == tpiece)
-        total = WIN;
-    else if(status == O_WINS && ourpiece != tpiece)
-        total = LOSE;
 
     //if() here and see if we get 2 pieces! high-ish score
     //make sure that if we go in the middle we get more points
@@ -113,6 +108,8 @@ int test_depth(const struct connect4 *game)
         //accidentally hardcoded for now
         if(i<2)
             if(check_status(&copy) == X_WINS)
+                if(bestmove[i] == bestmove[0])
+                    bestmove[0] = bestmove[i] + 1;
                 return bestmove[i];
         print_board(&copy);
 
