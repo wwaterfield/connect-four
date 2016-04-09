@@ -4,11 +4,19 @@
 // Edited on 4/2/08 to provide scaffolding for the COP3502H Group Project
 
 #include <stdlib.h>
+#include <stdio.h>
 
+#ifndef CON4
 #include "con4lib.h"
+#endif
+
+#ifndef ARUPOLD
 #include "arupsoldplayer.h"
+#endif
+
+#ifndef FIRST
 #include "firstavailable.h"
-#include "ourplayer.h"
+#endif
 
 int main() {
 
@@ -34,12 +42,10 @@ int main() {
 	        timespent = time(0);
             curmove = arup_move(&game, Xtime);
 	        timespent = time(0) - timespent;
-	        printf("X, have chosen column %d\n", curmove);
 	        Xtime -= timespent;
 
 	        // Check if the move entered was invalid.
 	        if (not_valid(&game, curmove)) {
-
                 printf("Sorry, that was not a valid move!\n");
                 printf("You have defaulted the game.\n");
                 status = O_WINS;
@@ -47,7 +53,6 @@ int main() {
 
             // Or if too much time has been used.
             else if (Xtime < 0) {
-
                 printf("Sorry, you ran out of time!\n");
                 printf("You have defaulted the game.\n");
                 status = O_WINS;
@@ -55,7 +60,7 @@ int main() {
 
             // Execute the move for player 1.
             else {
-                game.board[get_row(&game,curmove)][curmove] = PLAYERONE;
+                move(&game, curmove, PLAYERONE);
                 game.whoseTurn = PLAYERTWO;
             }
         }
@@ -65,14 +70,22 @@ int main() {
 
 	        // Time and retrieve the current computer player's move.
 	        timespent = time(0);
-            curmove = moving(&game, Ytime);
+	        printf("Player 2, please enter your move\n");
+	        scanf("%d", &curmove);
+
+            /*** Alternatively, you can get your move from a computer
+                 player:
+
+            curmove = arup_move(&game, Ytime);
+
+	        ***/
+
 	        timespent = time(0) - timespent;
 	        printf("O, have chosen column %d\n", curmove);
 	        Ytime -= timespent;
 
 	        // Check if the move entered was invalid.
 	        if (not_valid(&game, curmove)) {
-
                 printf("Sorry, that was not a valid move!\n");
                 printf("You have defaulted the game.\n");
                 status = X_WINS;
@@ -80,7 +93,6 @@ int main() {
 
             // Or if too much time has been used.
             else if (Ytime < 0) {
-
                 printf("Sorry, you ran out of time!\n");
                 printf("You have defaulted the game.\n");
                 status = X_WINS;
@@ -88,7 +100,7 @@ int main() {
 
             // Execute the move for player 2.
             else {
-                game.board[get_row(&game,curmove)][curmove] = PLAYERTWO;
+                move(&game, curmove, PLAYERTWO);
                 game.whoseTurn = PLAYERONE;
             }
         }
@@ -98,14 +110,17 @@ int main() {
             break;
 
         // Print the board so we can see it!
-        print_board(&game);
+
         printf("Time left for player one: %d seconds\n", Xtime);
         printf("Time left for player two: %d seconds\n", Ytime);
         status = check_status(&game);
 
-        // Wait for 2 seconds.
+        /*** Uncomment this if you want to wait for 2 seconds.
         timespent = time(0);
         while (time(0)-timespent < DISPLAY_WAIT_TIME);
+        ***/
+
+        print_board(&game);
 
     } // end while NOT_OVER loop
 
@@ -121,4 +136,3 @@ int main() {
 
     return 0;
 }
-
