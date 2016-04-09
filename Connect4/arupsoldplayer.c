@@ -1,5 +1,5 @@
 #include "arupsoldplayer.h"
-
+#include <math.h>
 // team is who the this player is moving for.
 int score (const struct connect4* game) {
 

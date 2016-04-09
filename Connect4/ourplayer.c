@@ -14,7 +14,7 @@ int checkscore(struct connect4* copied, BScore BestScore, int k)
         //get the row for the column
         int row = get_row(copied, column);
         //if row isn't valid, move on
-        if(not_valid(copied,column) == 0)
+        if(not_valid(copied,column) != 0)
             continue;
         //place piece, find score, if highscore then save it
         copied->board[row][column] = copied->whoseTurn;
@@ -84,6 +84,14 @@ int findscore (struct connect4* copied, BScore BestScore)
     	BestScore.score = 1000;
     if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
     	BestScore.score = 1000;
+
+    //col check
+    if(BestScore.column == 3)
+        BestScore.score += 500;
+
+
+
+
 
     if (BestScore.ourpiece == copied->whoseTurn)
     	return BestScore.score;

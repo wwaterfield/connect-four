@@ -6,13 +6,13 @@
 #define WIN 1000
 #define DEPTH 6
 
-
-
 // Checks the five possible directions
 const int DX_SIZE = 7;
 const int DX[] = {-1, 0, 1, 1, 1, 0, -1};
 const int DY[] = {-1, -1, -1, 0, 1, 1, 1};
+
 #endif // CON4
+
 typedef struct BestScore {
 	int score;
 	int row;

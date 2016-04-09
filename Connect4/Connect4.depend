@@ -56,12 +56,12 @@
 1460218424 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
 
-1460224376 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+1460235399 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
 	<stdio.h>
 	<stdlib.h>
 	"ourplayer.h"
 
-1460234642 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
+1460235620 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
 	"con4lib.h"
 	<math.h>
 
