@@ -5,89 +5,41 @@
 
 int checkscore(struct connect4* copy, char team)
 {
-    int j;
-
+    int column;
     int tscore = -1000;
     int highscore = -1000;
     int yPos;
 
-
-    for(j=0;j<7;j++)
+    for(column=0;column<7;column++)
     {
-        int row = get_row(copy, j);
-        if(row >= NUM_ROWS)
+        int row = get_row(copy, column);
+        if(not_valid(copy,column) == 0)
             continue;
-        tscore = findscore(copy, j, team, row);
-        if(highscore <= tscore && row < NUM_ROWS && not_valid(copy,j) == 0)
+
+        tscore = findscore(copy, column, row);
+        if(highscore <= tscore && row < NUM_ROWS)
         {
-            yPos = j;
+            yPos = column;
             highscore = tscore;
-            printf("new score: %d, new position: %d\n", highscore, yPos);
         }
     }
     return yPos;
 }
 
-int findscore (struct connect4* copy, int column, char ourpiece, int row)
+int findscore (struct connect4* copy, int column, int row)
 {
     int total = -1000;
-    char tpiece = copy->whoseTurn;
-    copy->board[row][column] = tpiece;
-    int status = check_status(copy);
+    copy->board[row][column] = copy->whoseTurn;
 
-
-
-    //DX DY array, if it's an open position, is it considered better or worse than not?
-    //check to see if there's less then three open positions from up or down and decide
-    //if going here is good or not
-    //check if this is the first move I suppose- good to know
-    if(column == 3)
-        total += 150;
-
-
-    if(row+1 < NUM_ROWS)
-        if(copy->board[row+1][column] != '_')
-            total+=10;
-    if(row-1 >= 0)
-        if(copy->board[row-1][column] != '_')
-            total+=10;
-    if(column+1 < NUM_COLS)
-        if(copy->board[row][column+1] != '_')
-            total+=500;
-    if(column-1 >= 0)
-        if(copy->board[row][column-1] != '_')
-            total+=500;
-    //checks four cases: if we placed the piece and we win or not
-    //the win case will trigger when we place a piece
-    //the lose case will trigger when the hypothetical opponent places a piece
-
-    if(status == X_WINS || status == O_WINS)
-        total = WIN;
-
-    //if() here and see if we get 2 pieces! high-ish score
-    //make sure that if we go in the middle we get more points
-    //if() here and see if we get 3 pieces! higher score
-    //if() here and see if we get 1 lonely piece.  Low score
-
-    //we might split up scoring into the opponent's scoring feature and ours.  That way
-    //we can go ahead and have 2 if statements per move...
-    //either one works?
-
-    //print_board(copy);
-    //printf("score: %d\n", total);
     copy->board[row][column] = '_';
-
     return total;
 }
 
-int test_depth(const struct connect4 *game)
+struct connect4 createStruct(const struct connect4* game)
 {
-    int i, j;
-    int bestmove[RUNS];
-
+    int i,j;
     struct connect4 copy;
     copy.board[NUM_ROWS][NUM_COLS];
-
     // Get a copy of the  current board.
     for (i = 0; i < NUM_ROWS; i++)
     {
@@ -97,38 +49,25 @@ int test_depth(const struct connect4 *game)
         }
     }
     copy.whoseTurn = game->whoseTurn;
+    return copy;
+}
 
+int test_depth(const struct connect4 *game)
+{
+    int i;
+    int bestmove;
+    struct connect4 copy = createStruct(game);
+
+    //get the best move of the 7
     for(i=0;i<RUNS;i++)
-    {
-        bestmove[i] = checkscore(&copy, copy.whoseTurn);
+        bestmove = checkscore(&copy, copy.whoseTurn);
 
-        int row = get_row(&copy, bestmove[i]);
-        copy.board[row][bestmove[i]] = copy.whoseTurn;
-
-        //accidentally hardcoded for now
-        if(i<2)
-            if(check_status(&copy) == X_WINS)
-                if(bestmove[i] == bestmove[0])
-                    bestmove[0] = bestmove[i] + 1;
-                return bestmove[i];
-        print_board(&copy);
-
-        if(copy.whoseTurn == 'X')
-            copy.whoseTurn = 'O';
-        else copy.whoseTurn = 'X';
-
-    }
-
-    return bestmove[0];
+    return bestmove;
 }
 
 int moving(const struct connect4 *game, int secondsLeft)
 {
-    //here we have to make sure that if score == LOSE Then we MUST place a piece there. Same for win.
-
     int bestMove;
-
     bestMove = test_depth(game);
-
     return bestMove;
 }
