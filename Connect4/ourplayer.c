@@ -19,6 +19,7 @@ int checkscore(struct connect4* copied, BScore BestScore, int k)
         //place piece, find score, if highscore then save it
         copied->board[row][column] = copied->whoseTurn;
         tscore = findscore(copied, BestScore);
+        printf("score: %d", tscore);
         if(BestScore.score <= tscore)
         {
             BestScore.column = column;
@@ -37,7 +38,7 @@ int checkscore(struct connect4* copied, BScore BestScore, int k)
         else if(BestScore.score > comparedscore)
             BestScore.score = comparedscore;
 
-
+        printf(" BestScore: %d\n", BestScore.score);
         copied->board[row][column] = '_';
 
     }
@@ -85,13 +86,9 @@ int findscore (struct connect4* copied, BScore BestScore)
     if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
     	BestScore.score = 1000;
 
-    //col check
-    if(BestScore.column == 3)
-        BestScore.score += 500;
 
 
-
-
+    print_board(copied);
 
     if (BestScore.ourpiece == copied->whoseTurn)
     	return BestScore.score;
