@@ -27,8 +27,9 @@
 1459961756 source:c:\users\dmarino\desktop\connect4\arupsoldplayer.c
 	"arupsoldplayer.h"
 
-1460218424 source:c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.c
+1460240572 source:c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.c
 	"arupsoldplayer.h"
+	<math.h>
 
 1460218424 c:\users\areax\documents\git\connect4\connect4\arupsoldplayer.h
 	"con4lib.h"
@@ -56,7 +57,7 @@
 1460218424 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
 
-1460239546 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+1460243289 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
 	<stdio.h>
 	<stdlib.h>
 	"ourplayer.h"
