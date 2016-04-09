@@ -20,7 +20,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         //place piece, find score, if highscore then save it
         copied->board[row][column] = copied->whoseTurn;
 
-        BestScore.score = findscore(copied, BestScore);
+        int fakescore = findscore(copied, BestScore);
+        BestScore.score = fakescore;
         BestScore.column = column;
         /*printf("score: %d  vs BestScore: %d\n", comparedscore, BestScore.score);
         if(comparedscore > BestScore.score && turnour == 0)
@@ -60,7 +61,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
         printf("Actual BestScore: %d\n", BestScore.score);
         copied->board[row][column] = '_';
-
+        BestScore.score -= fakescore;
     }
     return BestScore;
 }
