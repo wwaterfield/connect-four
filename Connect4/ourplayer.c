@@ -21,6 +21,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         copied->board[row][column] = copied->whoseTurn;
 
         int comparedscore = findscore(copied, BestScore);
+        printf("score: %d  ", comparedscore);
         if(comparedscore > BestScore.score && turnour)
             BestScore.score = comparedscore;
         else if(comparedscore < BestScore.score && !turnour)
@@ -31,6 +32,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
+            printf("score2.0: %d finalscore: %d\n", comparedscore, finalsay.score);
             if(column==0)
                 finalsay = temp;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
@@ -51,7 +53,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
                 finalsay.column = column;
             }
         }
-        printf("score: %d  ", comparedscore);
 
         printf(" BestScore: %d\n", BestScore.score);
         copied->board[row][column] = '_';
@@ -66,7 +67,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	char currentPos = copied->board[row + DX[i]][column + DY[i]];
 
 	if (column > NUM_COLS || row > NUM_ROWS || column < 0 || row < 0)
-		return pow(5, k-1);
+		return 0;
 
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
 		return 120;
@@ -89,7 +90,9 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	BestScore.score  += dxdyEval(copied, newRow, newCol, i, 1);
+    	int temp = dxdyEval(copied, newRow, newCol, i, 0);
+		printf("**Adding: %d**\n", temp);
+    	BestScore.score  += temp;
     }
 
 
