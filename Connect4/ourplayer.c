@@ -40,14 +40,14 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
            printf("tempscore: %d, finalscore: %d \n", temp.score, finalsay.score);
             if(turnour == 0)
             {
-                if(finalsay.score < temp.score)
+                if(BestScore.score < temp.score)
                 {
                     finalsay.score = temp.score;
                     finalsay.column = column;
                 }
 
             }
-            else if(finalsay.score > temp.score)
+            else if(BestScore.score > temp.score)
             {
                 finalsay.score = temp.score;
                 finalsay.column = column;
