@@ -3,7 +3,8 @@
 
 #define LOSE -1000
 #define WIN 1000
-#define RUNS 4
+#define DEPTH 4
+#define TOP_MOVES 3
 
 
 #endif // CON4
