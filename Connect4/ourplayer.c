@@ -20,12 +20,13 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         //place piece, find score, if highscore then save it
         copied->board[row][column] = copied->whoseTurn;
 
-        int comparedscore = findscore(copied, BestScore);
-        printf("score: %d  ", comparedscore);
-        if(comparedscore > BestScore.score && turnour)
+        BestScore.score = findscore(copied, BestScore);
+        BestScore.column = column;
+        /*printf("score: %d  vs BestScore: %d\n", comparedscore, BestScore.score);
+        if(comparedscore > BestScore.score && turnour == 0)
             BestScore.score = comparedscore;
-        else if(comparedscore < BestScore.score && !turnour)
-            BestScore.score = comparedscore;
+        else if(comparedscore < BestScore.score && turnour == 1)
+            BestScore.score = comparedscore;*/
 
         //RECURSION
         if(k != DEPTH)
@@ -38,6 +39,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
+           printf("tempscore: %d, finalscore: %d \n", temp.score, finalsay.score);
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
@@ -56,11 +58,11 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             }
         }
 
-        printf(" BestScore: %d\n", BestScore.score);
+        printf("Actual BestScore: %d\n", BestScore.score);
         copied->board[row][column] = '_';
 
     }
-    return finalsay;
+    return BestScore;
 }
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
@@ -71,13 +73,15 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	if (column > NUM_COLS || row > NUM_ROWS || column < 0 || row < 0)
 		return 0;
 
+	int odd = (i % 2 == 0) ? 1 : 2;
+
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
-		return 120;
+		return 5;
 
 	if (currentPos == copied->whoseTurn)
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1);
+		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) * odd;
 
-	return pow(5, k);
+	return pow(7, k-1);
 
 }
 
@@ -97,6 +101,9 @@ int findscore (struct connect4* copied, BScore BestScore)
     	BestScore.score  += temp;
     }
 
+    if(BestScore.column == 3)
+        BestScore.score += 30;
+    else if(BestScore.column == 2 || BestScore.column == 4) BestScore.score += 12;
 
     if (currentPiece == 'X' && (status == X_WINS || status == O_WINS))
     	BestScore.score = 1000;
@@ -118,7 +125,7 @@ BScore initstruct(const struct connect4* game)
 {
     BScore BestScore;
     BestScore.row = 1;
-    BestScore.column = 1;
+    BestScore.column = 3;
     BestScore.score = 0;
     BestScore.ourpiece = game->whoseTurn;
     return BestScore;
