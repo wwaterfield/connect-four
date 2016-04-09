@@ -3,11 +3,8 @@
 
 #include "ourplayer.h"
 
-<<<<<<< HEAD
+
 int checkscore(struct connect4* copy, BScore BestScore, int k)
-=======
-int checkscore(struct connect4* copy, int row, int column, int score, char ourpiece, int k)
->>>>>>> 8bfc662633f7b5b4762eebfa2c101b87a1670761
 {
     int column, comparedscore;
     int turnour = k % 2;
@@ -92,21 +89,7 @@ int findscore (struct connect4* copy, BScore BestScore)
     if (BestScore->ourpiece == copy->whoseTurn)
     	return BestScore.score;
     else
-<<<<<<< HEAD
-    	return = -total;
-=======
     	return -(BestScore.score);
-
->>>>>>> 8bfc662633f7b5b4762eebfa2c101b87a1670761
-}
-
-
-int hasThreeInARow(const struct connect4 *game)
-{
-	int DX[] = {0, -1, 0, 1};
-	int DY[] = {-1, 0, 1, 0};
-
-
 
 }
 
