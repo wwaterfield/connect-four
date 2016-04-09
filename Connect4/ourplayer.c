@@ -32,7 +32,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
-            printf("score2.0: %d finalscore: %d\n", comparedscore, finalsay.score);
+            printf("score2.0: %d finalscore: %d\n", temp.score, finalsay.score);
             if(column==0)
                 finalsay = temp;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
@@ -42,6 +42,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             {
                 if(finalsay.score < temp.score)
                 {
+                	printf("Made it 1st if\n");
                     finalsay.score = temp.score;
                     finalsay.column = column;
                 }
@@ -49,6 +50,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             }
             else if(finalsay.score > temp.score)
             {
+            	printf("Made it here as well to the else if\n");
                 finalsay.score = temp.score;
                 finalsay.column = column;
             }
@@ -90,7 +92,7 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	int temp = dxdyEval(copied, newRow, newCol, i, 0);
+    	int temp = dxdyEval(copied, newRow, newCol, i, 1);
 		printf("**Adding: %d**\n", temp);
     	BestScore.score  += temp;
     }
