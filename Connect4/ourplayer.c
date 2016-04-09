@@ -15,6 +15,8 @@ int checkscore(struct connect4* copy, char team)
     for(j=0;j<7;j++)
     {
         int row = get_row(copy, j);
+        if(row >= NUM_ROWS)
+            continue;
         tscore = findscore(copy, j, team, row);
         if(highscore <= tscore && row < NUM_ROWS && not_valid(copy,j) == 0)
         {
@@ -112,6 +114,8 @@ int test_depth(const struct connect4 *game)
         if(copy.whoseTurn == 'X')
             copy.whoseTurn = 'O';
         else copy.whoseTurn = 'X';
+        if(i == 1 && bestmove[i] == -1000)
+            return bestmove[i];
     }
 
     return bestmove[0];

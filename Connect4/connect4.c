@@ -80,11 +80,8 @@ int main() {
 
             curmove = moving(&game, Ytime);
 
-	        //timespent = time(0) - timespent;
-	        //printf("O, have chosen column %d\n", curmove);
-
-
-
+	        timespent = time(0) - timespent;
+	        printf("O, have chosen column %d\n", curmove);
 	        Ytime -= timespent;
 
 	        // Check if the move entered was invalid.
