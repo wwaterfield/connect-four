@@ -84,6 +84,14 @@ int findscore (struct connect4* copied, BScore BestScore)
     if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
     	BestScore.score = 1000;
 
+    //col check
+    if(BestScore.column == 3)
+        BestScore.score += 500;
+
+
+
+
+
     if (BestScore.ourpiece == copied->whoseTurn)
     	return BestScore.score;
     else
