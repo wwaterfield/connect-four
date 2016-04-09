@@ -42,16 +42,16 @@ int findscore (struct connect4* copy, int column, char ourpiece, int row)
         total += 50;
 
 
-    if(row+1 < ROW_SIZE)
+    if(row+1 < NUM_ROWS)
         if(copy->board[row+1][column] == ourpiece || copy->board[row+1][column] == tpiece)
             total+=100;
-    if(row+1 < ROW_SIZE)
+    if(row+1 < NUM_ROWS)
         if(copy->board[row-1][column] == ourpiece || copy->board[row-1][column] == tpiece)
             total+=100;
-    if(row+1 < ROW_SIZE)
+    if(row+1 < NUM_ROWS)
         if(copy->board[row][column+1] == ourpiece || copy->board[row][column+1] == tpiece)
             total+=100;
-    if(row+1 < ROW_SIZE)
+    if(row+1 < NUM_ROWS)
         if(copy->board[row][column-1] == ourpiece || copy->board[row][column-1] == tpiece)
             total+=100;
     //checks four cases: if we placed the piece and we win or not
@@ -76,7 +76,8 @@ int findscore (struct connect4* copy, int column, char ourpiece, int row)
     //we can go ahead and have 2 if statements per move...
     //either one works?
 
-
+    //print_board(copy);
+    //printf("score: %d\n", total);
     copy->board[row][column] = '_';
 
     return total;
@@ -85,7 +86,7 @@ int findscore (struct connect4* copy, int column, char ourpiece, int row)
 int test_depth(const struct connect4 *game)
 {
     int i, j;
-    int bestmove;
+    int bestmove[RUNS];
 
     struct connect4 copy;
     copy.board[NUM_ROWS][NUM_COLS];
@@ -100,13 +101,20 @@ int test_depth(const struct connect4 *game)
     }
     copy.whoseTurn = game->whoseTurn;
 
-    for(i=0;i<1;i++)
+    for(i=0;i<RUNS;i++)
     {
-        bestmove = checkscore(&copy, game->whoseTurn);
-        copy.whoseTurn = !copy.whoseTurn;
+        bestmove[i] = checkscore(&copy, copy.whoseTurn);
+
+        int row = get_row(&copy, bestmove[i]);
+        copy.board[row][bestmove[i]] = copy.whoseTurn;
+        print_board(&copy);
+
+        if(copy.whoseTurn == 'X')
+            copy.whoseTurn = 'O';
+        else copy.whoseTurn = 'X';
     }
 
-    return bestmove;
+    return bestmove[0];
 }
 
 int moving(const struct connect4 *game, int secondsLeft)
