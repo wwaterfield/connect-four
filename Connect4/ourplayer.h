@@ -1,21 +1,16 @@
 #ifndef CON4
 #include "con4lib.h"
-#include <math.>
+#include <math.h>
 
 #define LOSE -1000
 #define WIN 1000
-<<<<<<< HEAD
 #define DEPTH 6
-=======
-#define DEPTH 4
-#define TOP_MOVES 3
 
 // Checks the five possible directions
 const int DX_SIZE = 7;
 const int DX[] = {-1, 0, 1, 1, 1, 0, -1};
 const int DY[] = {-1, -1, -1, 0, 1, 1, 1};
 
->>>>>>> 45dc9f2ba0eaf47b7fa5f623cf66f04be5627664
 #endif // CON4
 
 

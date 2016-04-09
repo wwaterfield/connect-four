@@ -3,12 +3,7 @@
 
 #include "ourplayer.h"
 
-<<<<<<< HEAD
 int checkscore(struct connect4* copy, int row, int column, int score, char ourpiece, int k)
-=======
-
-int checkscore(struct connect4* copy, char team)
->>>>>>> 45dc9f2ba0eaf47b7fa5f623cf66f04be5627664
 {
     int yPos, column;
     int highscore, comparedscore;
@@ -49,12 +44,6 @@ int checkscore(struct connect4* copy, char team)
     return yPos;
 }
 
-<<<<<<< HEAD
-int findscore (struct connect4* copy, int column, int row, int score, char ourpiece)
-{
-    int total = -1000;
-    return total;
-=======
 int dxdyEval(struct connect4 *copy, int row, int column, int i, int k)
 {
 
@@ -73,34 +62,35 @@ int dxdyEval(struct connect4 *copy, int row, int column, int i, int k)
 
 }
 
-int findscore (struct connect4* copy, int row, int column int score, char ourpiece)
+int findscore (struct connect4* copy, BScore BestScore)
 {
 
     int status = check_status(&copy);
     int i;
     char currentPiece = copy->whoseTurn;
+    iBestScore->score
 
     for (i = 0; i < DX_SIZE; i++)
     {
-    	newRow = row + DX[i];
-    	newCol = column + DY[i];
+    	newRow = BestScore.row + DX[i];
+    	newCol = BestScore.column + DY[i];
 
     	currentPos = copy->board[newRow][newCol];
 
-    	score  = dxdyEval(copy, newRow, newCol, i, 1);
+    	BestScore.score  = dxdyEval(copy, newRow, newCol, i, 1);
     }
 
 
     if (currentPiece = 'X' && (status == X_WINS || status == O_WINS))
-    	score = 1000;
+    	BestScore.score = 1000;
     if (currentPiece = 'O' && (status == O_WINS || status == X_WINS))
-    	score = 1000;
+    	BestScore.score = 1000;
 
-    if (ourPiece == copy->whoseTurn)
-    	return total;
+    if (BestScore->ourpiece == copy->whoseTurn)
+    	return BestScore.score;
     else
-    	return = -total;
->>>>>>> 45dc9f2ba0eaf47b7fa5f623cf66f04be5627664
+    	return -(BestScore.score);
+
 }
 
 
