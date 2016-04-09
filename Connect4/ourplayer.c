@@ -28,7 +28,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
         if(k == DEPTH)
         {
-            printf("score: %d  vs BestScore: %d\n", finalsay.score, BestScore.score);
+            printf("score: %d  vs BestScore: %d, turn: %c\n", finalsay.score, BestScore.score, (turn == 0) ? 'O' : 'X');
             if(finalsay.score < BestScore.score && turnour == 0)
                 finalsay.score = BestScore.score;
             else if(finalsay.score > BestScore.score && turnour == 1)
@@ -45,7 +45,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
-           printf("tempscore: %d vs finalscore: %d turn: %d \n", temp.score, finalsay.score, turnour);
+           printf("tempscore: %d vs finalscore: %d turn: %c \n", temp.score, finalsay.score, (turn == 0) ? 'O' : 'X'));
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
