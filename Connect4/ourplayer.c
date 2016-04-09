@@ -21,6 +21,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         copied->board[row][column] = copied->whoseTurn;
 
         int comparedscore = findscore(copied, BestScore);
+        printf("score: %d  ", comparedscore);
         if(comparedscore > BestScore.score && turnour)
             BestScore.score = comparedscore;
         else if(comparedscore < BestScore.score && !turnour)
@@ -31,6 +32,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
+            printf("  score 2.0: %d finalscore: %d\n", temp.score, finalsay.score);
             if(column==0)
                 finalsay = temp;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
@@ -51,7 +53,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
                 finalsay.column = column;
             }
         }
-        printf("score: %d  ", comparedscore);
 
 
         printf(" BestScore: %d\n", BestScore.score);
