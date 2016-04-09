@@ -3,15 +3,9 @@
 
 #include "ourplayer.h"
 
-<<<<<<< HEAD
-int checkscore(struct connect4* copy, int row, int column, int score, char ourpiece, int k)
-=======
-
-int checkscore(struct connect4* copy, char team)
->>>>>>> 45dc9f2ba0eaf47b7fa5f623cf66f04be5627664
+int checkscore(struct connect4* copy, BScore BestScore, int k)
 {
-    int yPos, column;
-    int highscore, comparedscore;
+    int column, comparedscore;
     int turnour = k % 2;
 
     for(column=0;column<7;column++)
@@ -24,10 +18,10 @@ int checkscore(struct connect4* copy, char team)
         //place piece, find score, if highscore then save it
         copy->board[row][column] = copy->whoseTurn;
         tscore = findscore(copy, row, column);
-        if(highscore <= tscore)
+        if(BestScore.score <= tscore)
         {
-            yPos = column;
-            highscore = tscore;
+            BestScore.column = column;
+            BestScore.score = tscore;
         }
         if(k != DEPTH)
             checkscore(copy, k+1, column, row);
@@ -49,12 +43,6 @@ int checkscore(struct connect4* copy, char team)
     return yPos;
 }
 
-<<<<<<< HEAD
-int findscore (struct connect4* copy, int column, int row, int score, char ourpiece)
-{
-    int total = -1000;
-    return total;
-=======
 int dxdyEval(struct connect4 *copy, int row, int column, int i, int k)
 {
 
@@ -100,7 +88,6 @@ int findscore (struct connect4* copy, int row, int column int score, char ourpie
     	return total;
     else
     	return = -total;
->>>>>>> 45dc9f2ba0eaf47b7fa5f623cf66f04be5627664
 }
 
 
