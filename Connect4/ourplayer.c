@@ -33,6 +33,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
                 finalsay.score = BestScore.score;
             else if(finalsay.score > BestScore.score && turnour == 1)
                 finalsay.score = BestScore.score;
+            printf("final score now: %d\n", finalsay.score);
         }
 
         //RECURSION
@@ -44,7 +45,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
-           printf("tempscore: %d vs finalscore: %d \n", temp.score, finalsay.score);
+           printf("tempscore: %d vs finalscore: %d turn: %d \n", temp.score, finalsay.score, turnour);
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
