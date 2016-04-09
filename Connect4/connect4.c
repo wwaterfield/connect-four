@@ -18,6 +18,10 @@
 #include "firstavailable.h"
 #endif
 
+#ifndef OURPLAYER
+#include "ourplayer.h"
+#endif
+
 int main() {
 
     struct connect4 game;
@@ -71,14 +75,10 @@ int main() {
 	        // Time and retrieve the current computer player's move.
 	        timespent = time(0);
 	        printf("Player 2, please enter your move\n");
-	        scanf("%d", &curmove);
+	        //scanf("%d", &curmove);
 
-            /*** Alternatively, you can get your move from a computer
-                 player:
 
-            curmove = arup_move(&game, Ytime);
-
-	        ***/
+            curmove = moving(&game, Ytime);
 
 	        timespent = time(0) - timespent;
 	        printf("O, have chosen column %d\n", curmove);
