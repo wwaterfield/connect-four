@@ -4,104 +4,108 @@
 #include "ourplayer.h"
 
 
-int checkscore(struct connect4* copy, BScore BestScore, int k)
+int checkscore(struct connect4* copied, BScore BestScore, int k)
 {
-    int column, comparedscore;
+    int column, comparedscore, tscore;
     int turnour = k % 2;
 
     for(column=0;column<7;column++)
     {
         //get the row for the column
-        int row = get_row(copy, column);
+        int row = get_row(copied, column);
         //if row isn't valid, move on
-        if(not_valid(copy,column) == 0)
+        if(not_valid(copied,column) == 0)
             continue;
         //place piece, find score, if highscore then save it
-        copy->board[row][column] = copy->whoseTurn;
-        tscore = findscore(copy, row, column);
+        copied->board[row][column] = copied->whoseTurn;
+        tscore = findscore(copied, BestScore);
         if(BestScore.score <= tscore)
         {
             BestScore.column = column;
             BestScore.score = tscore;
         }
         if(k != DEPTH)
-            checkscore(copy, k+1, column, row);
-        int comparedscore = findscore(copy);
+            checkscore(copied, BestScore, k+1);
+        int comparedscore = findscore(copied, BestScore);
         //our turn
         if(turnour)
         {
-            if(highscore < comparedscore)
-                highscore = comparedscore;
+            if(BestScore.score < comparedscore)
+                BestScore.score = comparedscore;
         }
-        else if(highscore > comparedscore)
-            highscore = comparedscore;
+
+        else if(BestScore.score > comparedscore)
+            BestScore.score = comparedscore;
 
 
-        copy->board[row][column] = '_';
+        copied->board[row][column] = '_';
 
     }
-    //here we're going to return the top 3 moves.
-    return yPos;
+    return BestScore.column;
 }
 
-int dxdyEval(struct connect4 *copy, int row, int column, int i, int k)
+int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 {
 
-	char currentPos = copy->board[row + DX[i]][column + DY[i]];
+	char currentPos = copied->board[row + DX[i]][column + DY[i]];
 
 	if (column > NUM_COLS || row > NUM_ROWS || column < 0 || row < 0)
 		return pow(5, k-1);
 
-	if (k == 1 && currentPos != copy->whoseTurn && currentPos != '_')
+	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
 		return 120;
 
-	if (currentPos == copy->whoseTurn)
-		return dxdyEval(copy, row+DX[i], column+DY[i], i, k+1);
+	if (currentPos == copied->whoseTurn)
+		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1);
 
 	return pow(5, k);
 
 }
 
-int findscore (struct connect4* copy, BScore BestScore)
+int findscore (struct connect4* copied, BScore BestScore)
 {
 
-    int status = check_status(&copy);
+    int status = check_status(copied);
     int i;
-    char currentPiece = copy->whoseTurn;
-    BestScore->score;
+    char currentPiece = copied->whoseTurn;
 
     for (i = 0; i < DX_SIZE; i++)
     {
-    	newRow = BestScore.row + DX[i];
-    	newCol = BestScore.column + DY[i];
+    	int newRow = BestScore.row + DX[i];
+    	int newCol = BestScore.column + DY[i];
 
-    	currentPos = copy->board[newRow][newCol];
+    	int currentPos = copied->board[newRow][newCol];
 
-    	BestScore.score  = dxdyEval(copy, newRow, newCol, i, 1);
+    	BestScore.score  = dxdyEval(copied, newRow, newCol, i, 1);
     }
 
 
-    if (currentPiece = 'X' && (status == X_WINS || status == O_WINS))
+    if (currentPiece == 'X' && (status == X_WINS || status == O_WINS))
     	BestScore.score = 1000;
-    if (currentPiece = 'O' && (status == O_WINS || status == X_WINS))
+    if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
     	BestScore.score = 1000;
 
-    if (BestScore->ourpiece == copy->whoseTurn)
+    if (BestScore.ourpiece == copied->whoseTurn)
     	return BestScore.score;
     else
-    	return -(BestScore.score);
+    	return (BestScore.score);
 
 }
 
 int test_depth(const struct connect4 *game)
 {
-    int i;
     int bestmove;
-    struct connect4 copy = copy(game);
+    struct connect4* copied = copy(game);
 
     //get the best move of the 7
     //check for integer best move?
-        bestmove = checkscore(&copy, 0);
+    BScore BestScore;
+    BestScore.row = 0;
+    BestScore.column = 0;
+    BestScore.score = 0;
+    BestScore.ourpiece = game->whoseTurn;
+
+        bestmove = checkscore(copied, BestScore, 0);
 
     return bestmove;
 }
