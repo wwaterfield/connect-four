@@ -92,15 +92,16 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	if (column > NUM_COLS || row > NUM_ROWS || column < 0 || row < 0)
 		return 0;
 
-	int odd = (i % 2 == 0) ? 1 : 2;
+	int odd = (i % 2 == 0) ? 0 : 10;
 
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
-		return 5;
+		return 2;
 
 	if (currentPos == copied->whoseTurn)
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) * odd;
+		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
 
-	return pow(7, k-1);
+    printf("returning 4^%d", k);
+	return pow(4, k-1);
 
 }
 
@@ -115,14 +116,24 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	temp = dxdyEval(copied, newRow, newCol, i, 1);
+        int ou = dxdyEval(copied, newRow, newCol, i, 1);
+        printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
+    	 temp += ou;
 		//printf("**Adding: %d**\n", temp);
     }
 
     if(BestScore.column == 3)
-        temp += 30;
+    {
+        temp += 11;
+        printf("**Adding 13 because row 3**\n");
+    }
 
-    else if(BestScore.column == 2 || BestScore.column == 4) temp += 12;
+
+    else if(BestScore.column == 2 || BestScore.column == 4)
+    {
+        printf("**Adding 8 because row 2 || 4\n");
+        temp += 8;
+    }
 
     if (currentPiece == 'X' && (status == X_WINS || status == O_WINS))
     	temp = 1000;
