@@ -12,6 +12,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
     for(column=0;column<7;column++)
     {
+        printf("THIS IS FINALSAY.SCORE: %d\n", finalsay.score);
         //get the row for the column
         int row = get_row(copied, column);
         //if row isn't valid, move on
@@ -25,6 +26,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         BestScore.column = column;
         if(column==0)
                 finalsay = BestScore;
+        printf("THIS IS FINALSAY.SCORE AFTER FIRST BESTSCORE ITERATION: %d\n", finalsay.score);
 
         if(k == DEPTH)
         {
@@ -62,6 +64,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
                 finalsay.score = temp.score;
                 finalsay.column = column;
             }
+
+            printf("FINISHED RECURSION: FINAL SCORE IMMINENT: %d\n", finalsay.score);
         }
 
         printf("Actual BestScore: %d\n", BestScore.score);
