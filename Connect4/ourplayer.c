@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "ourplayer.h"
-#define DEBUG 1
+#define DEBUG 0
 
 BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 {
@@ -147,7 +147,7 @@ int findscore (struct connect4* copied, BScore BestScore)
 
     if(BestScore.column == 3)
     {
-        temp += 10;
+        temp += 7;
         if(DEBUG)
             printf("**Adding 10 because row 3**\n");
     }
@@ -157,7 +157,7 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
         if(DEBUG)
             printf("**Adding 7 because row 2 || 4\n");
-        temp += 7;
+        temp += 4;
     }
 
     if (currentPiece == 'X' && (status == X_WINS))
