@@ -2,15 +2,18 @@
 #include <stdlib.h>
 
 #include "ourplayer.h"
-
+#define DEBUG 1
 
 BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 {
     int column;
     int turnour = k % 2;
+
     BScore finalsay = initstruct(copied);
     finalsay.score = BestScore.score;
     finalsay.column = BestScore.column;
+    if(k==0)
+        finalsay.score = -1000;
 
     for(column=0;column<7;column++)
     {
@@ -25,23 +28,24 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         BestScore.row = row;
 
         int fakescore = findscore(copied, BestScore);
-        if(fakescore == 1000 || fakescore == -1000)
-        {
-            finalsay.column = column;
-            finalsay.score = fakescore;
-            return finalsay;
-        }
-        printf("projected score: %d BestScore before addition: %d\n", fakescore, BestScore.score);
+
+
+        if(DEBUG)
+            printf("projected score: %d BestScore before addition: %d\n", fakescore, BestScore.score);
         BestScore.score += fakescore;
 
         if(k == DEPTH)
         {
-            printf("score: %d  vs BestScore: %d, turn: %c\n", finalsay.score, BestScore.score, (turnour == 0) ? 'O' : 'X');
+            if(DEBUG)
+                printf("score: %d  vs BestScore: %d, turn: %c\n", finalsay.score, BestScore.score, (turnour == 0) ? 'O' : 'X');
+            if(DEBUG)
+                printf("column: %d  vs Comparecol: %d, turn: %c\n", finalsay.column, BestScore.column, (turnour == 0) ? 'O' : 'X');
             if(finalsay.score < BestScore.score && turnour == 0)
                 finalsay.score = BestScore.score;
             else if(finalsay.score > BestScore.score && turnour == 1)
                 finalsay.score = BestScore.score;
-            printf("final score now: %d\n\n", finalsay.score);
+            if(DEBUG)
+                printf("final score now: %d best column: %d turn: %c\n\n", finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
         }
 
         //RECURSION
@@ -49,16 +53,18 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
-            if(temp.score == 1000 || temp.score == -1000) return temp;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
-           printf("\n\n\ntempscore: %d vs finalscore: %d place: %d turn: %c \n", temp.score, finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
+
+           if(DEBUG)
+                printf("\n\n\ntempscore: %d vs finalscore: %d place: %d turn: %c \n", temp.score, finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
                 {
-                	printf("Made it 1st if\n");
+                	if(DEBUG)
+                        printf("Made it 1st if\n");
                     finalsay.score = temp.score;
                     finalsay.column = column;
                 }
@@ -66,7 +72,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             }
             else if(finalsay.score > temp.score)
             {
-            	printf("Made it here as well to the else if\n");
+            	if(DEBUG)
+                    printf("Made it here as well to the else if\n");
                 finalsay.score = temp.score;
                 finalsay.column = column;
             }
@@ -75,7 +82,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         BestScore.score -= fakescore;
     }
 
-    printf("This is the best column to move: %d with score %d\n\n", finalsay.column, finalsay.score);
+    if(DEBUG)
+        printf("This is the best column to move: %d with score %d for: %c\n\n", finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
     return finalsay;
 }
 
@@ -84,6 +92,8 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0) && k == 1)
 		return 0;
+    else if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0))
+		k -= 1;
 
 	char currentPos = copied->board[row][column];
 
@@ -92,7 +102,13 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     //if adjacent pieces are next to yours
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
-		return 2+odd;
+		return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+    /*
+    if (k == 2 && currentPos != copied->whoseTurn && currentPos != '_')
+		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 30 + odd;
+    if (k == 3 && currentPos != copied->whoseTurn && currentPos != '_')
+		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 400 + odd;*/
+
     //if your piece is next to the place pieced, return a power of 4
 	else if (currentPos == copied->whoseTurn)
 		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
@@ -102,8 +118,8 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
 
-
-    printf("returning 10^%d", k-1);
+    if(DEBUG)
+        printf("returning 10^%d", k-1);
 	return pow(10, k-1);
 
 }
@@ -119,35 +135,44 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	printf("row: %d col: %d  ", BestScore.row, BestScore.column);
+    	if(DEBUG)
+            printf("row: %d col: %d  ", BestScore.row, BestScore.column);
         int ou = dxdyEval(copied, newRow, newCol, i, 1);
-        printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
+        if(DEBUG)
+            printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
     	 temp += ou;
-		//printf("**Adding: %d**\n", temp);
+        if(DEBUG)
+            printf("**Adding: %d**\n", temp);
     }
 
     if(BestScore.column == 3)
     {
         temp += 10;
-        printf("**Adding 10 because row 3**\n");
+        if(DEBUG)
+            printf("**Adding 10 because row 3**\n");
     }
 
 
     else if(BestScore.column == 2 || BestScore.column == 4)
     {
-        printf("**Adding 7 because row 2 || 4\n");
+        if(DEBUG)
+            printf("**Adding 7 because row 2 || 4\n");
         temp += 7;
     }
 
-    if (currentPiece == 'X' && (status == X_WINS || status == O_WINS))
+    if (currentPiece == 'X' && (status == X_WINS))
     	temp = 1000;
-    if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
+    if (currentPiece == 'O' && (status == O_WINS))
     	temp = 1000;
+    if (currentPiece == 'X' && (status == O_WINS))
+    	temp = -1000;
+    if (currentPiece == 'O' && (status == X_WINS))
+    	temp = -1000;
 
-
-
-    print_board(copied);
-    printf("temp scored a : for this: %d\n", temp);
+    if(DEBUG)
+        print_board(copied);
+    if(DEBUG)
+        printf("temp scored a : for this: %d\n", temp);
 
     if (BestScore.ourpiece == copied->whoseTurn)
     	return temp;
