@@ -31,17 +31,14 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             finalsay.score = fakescore;
             return finalsay;
         }
-        printf("projected score: %d BestScore before addition: %d\n", fakescore, BestScore.score);
         BestScore.score += fakescore;
 
         if(k == DEPTH)
         {
-            printf("score: %d  vs BestScore: %d, turn: %c\n", finalsay.score, BestScore.score, (turnour == 0) ? 'O' : 'X');
             if(finalsay.score < BestScore.score && turnour == 0)
                 finalsay.score = BestScore.score;
             else if(finalsay.score > BestScore.score && turnour == 1)
                 finalsay.score = BestScore.score;
-            printf("final score now: %d\n\n", finalsay.score);
         }
 
         //RECURSION
@@ -49,16 +46,14 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
             BScore temp = checkscore(copied, BestScore, k+1);
-            if(temp.score == 1000 || temp.score == -1000) return temp;
+            //if(temp.score == 1000 || temp.score == -1000) return temp;
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
-           printf("\n\n\ntempscore: %d vs finalscore: %d place: %d turn: %c \n", temp.score, finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
                 {
-                	printf("Made it 1st if\n");
                     finalsay.score = temp.score;
                     finalsay.column = column;
                 }
@@ -66,7 +61,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             }
             else if(finalsay.score > temp.score)
             {
-            	printf("Made it here as well to the else if\n");
                 finalsay.score = temp.score;
                 finalsay.column = column;
             }
@@ -74,8 +68,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         copied->board[row][column] = '_';
         BestScore.score -= fakescore;
     }
-
-    printf("This is the best column to move: %d with score %d\n\n", finalsay.column, finalsay.score);
     return finalsay;
 }
 
@@ -84,7 +76,6 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0) && k == 1)
 		return 0;
-
 	char currentPos = copied->board[row][column];
 
     //not straight down
@@ -101,9 +92,6 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
     //if you hit a dead end after moving in a direction for a few, turn around and count the real score
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
-
-
-    printf("returning 10^%d", k-1);
 	return pow(10, k-1);
 
 }
@@ -119,35 +107,22 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	printf("row: %d col: %d  ", BestScore.row, BestScore.column);
         int ou = dxdyEval(copied, newRow, newCol, i, 1);
-        printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
     	 temp += ou;
 		//printf("**Adding: %d**\n", temp);
     }
 
     if(BestScore.column == 3)
-    {
-        temp += 10;
-        printf("**Adding 10 because row 3**\n");
-    }
+        temp += 7;
 
 
     else if(BestScore.column == 2 || BestScore.column == 4)
-    {
-        printf("**Adding 7 because row 2 || 4\n");
-        temp += 7;
-    }
+        temp += 4;
 
     if (currentPiece == 'X' && (status == X_WINS || status == O_WINS))
     	temp = 1000;
     if (currentPiece == 'O' && (status == O_WINS || status == X_WINS))
     	temp = 1000;
-
-
-
-    print_board(copied);
-    printf("temp scored a : for this: %d\n", temp);
 
     if (BestScore.ourpiece == copied->whoseTurn)
     	return temp;
