@@ -4,7 +4,7 @@
 
 #define LOSE -1000
 #define WIN 1000
-#define DEPTH 2
+#define DEPTH 4
 
 // Checks the five possible directions
 const int DX_SIZE = 7;

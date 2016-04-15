@@ -26,10 +26,15 @@
 1460218424 c:\users\areax\documents\git\connect4\connect4\firstavailable.h
 	"con4lib.h"
 
-1460313600 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
+1460738162 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
 	"con4lib.h"
 	<math.h>
 
 1460218424 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
+
+1460737863 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+	<stdio.h>
+	<stdlib.h>
+	"ourplayer.h"
 
