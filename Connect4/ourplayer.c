@@ -100,42 +100,66 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
 //wyatt, we may have to re-create our dxdyeval all over again
 
-
-int dxdyEval(struct connect4 *copied, int row, int column, int i, int k, int inc)
+int check(struct connet4* copied, int array[7])
 {
+    //connected 1 is our piece
+    //connected -1 means their piece previously
+    int i, connected = 0, score = 0;
+    for(i=0;i<7;i++)
+    {
+        if(array[i]) == -2)
+            continue;
+        else if(array[i] == -1)
+        {
+            if(connected >= 0)
+                connected = -1;
+            else if(connected < 0)
+                connected--;
 
-    if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0) && k == 1)
-		return 0;
-    else if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0))
-		k -= 1;
+            score += pow(3, -connected);
 
-	char currentPos = copied->board[row][column];
+        }
+        else if(array[i] == 0)
+            score+=1;
+        else
+        {
+            if(connected <= 0)
+                connected = 1;
+            else if(connected > 0)
+                connected++;
 
-    //not straight down
-	int odd = (i == 1 || i == 5) ? 6 : 0;
+            score += pow(3, connected);
+        }
+    }
+}
 
-    //if adjacent pieces are next to yours
-	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
-		return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd - 2*inc;
-    /*
-    if (k == 2 && currentPos != copied->whoseTurn && currentPos != '_')
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 30 + odd;
-    if (k == 3 && currentPos != copied->whoseTurn && currentPos != '_')
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 400 + odd;*/
+int dxdyEval(struct connect4 *copied, int row, int column, int i)
+{
+    int array[7] = {0, 0, 0, 1, 0, 0, 0};
 
-    //if your piece is next to the place pieced, return a power of 4
-	else if (currentPos == copied->whoseTurn)
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1, inc) + odd;
-    //if you have a blank spot, keep going to see if there's a potential row
-    else if (currentPos == '_') return dxdyEval(copied, row+DX[i], column+DY[i], i, k, inc+1);
-    //if you hit a dead end after moving in a direction for a few, turn around and count the real score
-    else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
-        return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0, 0);
+    int j;
+    for(j=0;i<3;j++)
+    {
+        row += DX[i];
+        column += DY[i];
+    }
 
-    if(DEBUG)
-        printf("returning 10^%d", k-1);
-	return pow(10, k-1);
+    for(j=0;j<7;j++)
+    {
+        if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0))
+            array[j] = -2;
+        else if(copied[column][row] == '_') array[j] = 0;
+        else if(copied[column][row] == copied->whoseTurn) array[j] = 1;
+        else array[j] = -1;
 
+        row -= DX[i];
+        row -= DY[i];
+    }
+
+        //run through every if statement here regarding what happens to every piece
+        int score =check(copie, array);
+
+        return score;
 }
 
 int findscore (struct connect4* copied, BScore BestScore)
@@ -145,13 +169,13 @@ int findscore (struct connect4* copied, BScore BestScore)
     int i;
     char currentPiece = copied->whoseTurn;
 
-    for (i = 0; i < DX_SIZE; i++)
+    for (i = 0; i < DX_SIZE-3; i++)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
     	if(DEBUG)
             printf("row: %d col: %d  ", BestScore.row, BestScore.column);
-        int ou = dxdyEval(copied, newRow, newCol, i, 1, 0);
+        int ou = dxdyEval(copied, newRow, newCol, i);
         if(DEBUG)
             printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
     	 temp += ou;
