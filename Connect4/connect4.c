@@ -45,8 +45,8 @@ int main() {
 
 	        // Time and retrieve the current computer player's move.
 	        timespent = time(0);
-	        scanf("%d", &curmove);
-            //curmove = arup_move(&game, Xtime);
+	        //scanf("%d", &curmove);
+            curmove = arup_move(&game, Xtime);
 	        timespent = time(0) - timespent;
 	        Xtime -= timespent;
 
@@ -80,7 +80,7 @@ int main() {
 	        //scanf("%d", &curmove);
 
 
-            curmove = moving(&game, Ytime);
+            curmove = g9_moving(&game, Ytime);
 
 	        timespent = time(0) - timespent;
 	        printf("O, have chosen column %d\n", curmove);

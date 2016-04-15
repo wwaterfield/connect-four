@@ -20,9 +20,8 @@ typedef struct BestScore {
 	char ourpiece;
 } BScore;
 
-BScore initstruct(const struct connect4* game);
-BScore checkscore(struct connect4* copied, BScore BestScore, int k);
-int findscore (struct connect4* copied, BScore BestScore);
-int test_depth(const struct connect4 *game);
-struct connect4 createStruct(const struct connect4* game);
-int moving(const struct connect4 *game, int secondsLeft);
+BScore g9_initstruct(const struct connect4* game);
+BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k);
+int g9_findscore (struct connect4* copied, BScore BestScore);
+int g9_test_depth(const struct connect4 *game);
+int g9_moving(const struct connect4 *game, int secondsLeft);

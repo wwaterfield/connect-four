@@ -4,12 +4,12 @@
 #include "ourplayer.h"
 #define DEBUG 0
 
-BScore checkscore(struct connect4* copied, BScore BestScore, int k)
+BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 {
     int column;
     int turnour = k % 2;
 
-    BScore finalsay = initstruct(copied);
+    BScore finalsay = g9_initstruct(copied);
     finalsay.score = BestScore.score;
     finalsay.column = BestScore.column;
     if(k==0)
@@ -27,7 +27,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         BestScore.column = column;
         BestScore.row = row;
 
-        int fakescore = findscore(copied, BestScore);
+        int fakescore = g9_findscore(copied, BestScore);
 
 
         if(DEBUG)
@@ -52,7 +52,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         if(k != DEPTH)
         {
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
-            BScore temp = checkscore(copied, BestScore, k+1);
+            BScore temp = g9_checkscore(copied, BestScore, k+1);
             copied->whoseTurn = (copied->whoseTurn == 'X') ? 'O' : 'X';
 
             //our turn
@@ -114,7 +114,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
     //if you have a blank spot, keep going to see if there's a potential row
     else if (currentPos == '_') return dxdyEval(copied, row+DX[i], column+DY[i], i, k);
-    //if you hit a dead end after moving in a direction for a few, turn around and count the real score
+    //if you hit a dead end after g9_moving in a direction for a few, turn around and count the real score
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
 
@@ -124,7 +124,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
 }
 
-int findscore (struct connect4* copied, BScore BestScore)
+int g9_findscore (struct connect4* copied, BScore BestScore)
 {
     int temp = 0;
     int status = check_status(copied);
@@ -181,7 +181,7 @@ int findscore (struct connect4* copied, BScore BestScore)
 
 }
 
-BScore initstruct(const struct connect4* game)
+BScore g9_initstruct(const struct connect4* game)
 {
     BScore BestScore;
     BestScore.row = 1;
@@ -191,23 +191,23 @@ BScore initstruct(const struct connect4* game)
     return BestScore;
 }
 
-int test_depth(const struct connect4 *game)
+int g9_test_depth(const struct connect4 *game)
 {
     int bestmove;
     struct connect4* copied = copy(game);
 
     //get the best move of the 7
     //check for integer best move?
-    BScore node = initstruct(game);
+    BScore node = g9_initstruct(game);
 
-     bestmove = checkscore(copied, node, 0).column;
+     bestmove = g9_checkscore(copied, node, 0).column;
 
     return bestmove;
 }
 
-int moving(const struct connect4 *game, int secondsLeft)
+int g9_moving(const struct connect4 *game, int secondsLeft)
 {
     int bestMove;
-    bestMove = test_depth(game);
+    bestMove = g9_test_depth(game);
     return bestMove;
 }
