@@ -100,14 +100,15 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
 //wyatt, we may have to re-create our dxdyeval all over again
 
-int check(struct connet4* copied, int array[7])
+int check(struct connect4* copied, int array[7])
 {
     //connected 1 is our piece
     //connected -1 means their piece previously
     int i, connected = 0, score = 0;
     for(i=0;i<7;i++)
     {
-        if(array[i]) == -2)
+
+        if(array[i] == -2)
             continue;
         else if(array[i] == -1)
         {
@@ -116,8 +117,7 @@ int check(struct connet4* copied, int array[7])
             else if(connected < 0)
                 connected--;
 
-            score += pow(3, -connected);
-
+            score += pow(2-connected*2, -connected);
         }
         else if(array[i] == 0)
             score+=1;
@@ -130,7 +130,11 @@ int check(struct connet4* copied, int array[7])
 
             score += pow(3, connected);
         }
+
+        if(DEBUG)
+            printf("score: %d\n  connected: %d\n", score, connected);
     }
+    return score;
 }
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i)
@@ -138,7 +142,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i)
     int array[7] = {0, 0, 0, 1, 0, 0, 0};
 
     int j;
-    for(j=0;i<3;j++)
+    for(j=0;j<2;j++)
     {
         row += DX[i];
         column += DY[i];
@@ -148,16 +152,17 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i)
     {
         if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0))
             array[j] = -2;
-        else if(copied[column][row] == '_') array[j] = 0;
-        else if(copied[column][row] == copied->whoseTurn) array[j] = 1;
+        else if(copied->board[column][row] == '_') array[j] = 0;
+        else if(copied->board[column][row] == copied->whoseTurn) array[j] = 1;
         else array[j] = -1;
-
         row -= DX[i];
-        row -= DY[i];
+        column -= DY[i];
+        if(DEBUG)
+            printf(" %d ", array[j]);
     }
 
         //run through every if statement here regarding what happens to every piece
-        int score =check(copie, array);
+        int score =check(copied, array);
 
         return score;
 }

@@ -33,3 +33,8 @@
 1460218424 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
 
+1460737313 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+	<stdio.h>
+	<stdlib.h>
+	"ourplayer.h"
+
