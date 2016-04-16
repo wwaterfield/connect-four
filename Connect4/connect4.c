@@ -34,9 +34,7 @@ int main() {
 
     // Set up the game.
     init_board(&game);
-    //printf("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
     print_board(&game);
-    //printf("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
     // Play till the game's over...
     while (status == NOT_OVER) {
 

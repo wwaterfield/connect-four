@@ -12,8 +12,9 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
     BScore finalsay = initstruct(copied);
     finalsay.score = BestScore.score;
     finalsay.column = BestScore.column;
-    if(k==0)
+    if(!turnour)
         finalsay.score = -1000;
+    else finalsay.score = 1000;
 
     for(column=0;column<7;column++)
     {
@@ -29,7 +30,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
         int fakescore = findscore(copied, BestScore);
 
-
         if(DEBUG)
             printf("projected score: %d BestScore before addition: %d\n", fakescore, BestScore.score);
         BestScore.score += fakescore;
@@ -41,9 +41,17 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             if(DEBUG)
                 printf("column: %d  vs Comparecol: %d, turn: %c\n", finalsay.column, BestScore.column, (turnour == 0) ? 'O' : 'X');
             if(finalsay.score < BestScore.score && turnour == 0)
+            {
                 finalsay.score = BestScore.score;
+                BestScore.column = BestScore.column;
+            }
+
             else if(finalsay.score > BestScore.score && turnour == 1)
+            {
                 finalsay.score = BestScore.score;
+                finalsay.column = BestScore.column;
+            }
+
             if(DEBUG)
                 printf("final score now: %d best column: %d turn: %c\n\n", finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
         }
@@ -89,6 +97,32 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 {
+    if(copied->board[row][column] != copied->whoseTurn)
+        if(k==3)
+        {
+            int fakescore = 0;
+            int temprow = row;
+            int tempcol = column;
+            if ((tempcol >= NUM_COLS || temprow >= NUM_ROWS || tempcol < 0 || temprow < 0) && k == 1)
+            fakescore -= 20;
+            else if(copied->board[temprow][tempcol] != '_')
+            fakescore -= 15;
+
+            temprow = row - DX[i]*4;
+            tempcol = column - DY[i]*4;
+            if ((tempcol >= NUM_COLS || temprow >= NUM_ROWS || tempcol < 0 || row < 0) && k == 1)
+            {
+                if(fakescore == 20)
+                    fakescore -= 40;
+                else fakescore -= 20;
+            }
+            else if(copied->board[temprow][tempcol] != '_')
+                fakescore -= 15;
+            if(fakescore == 0)
+            return 200;
+            return fakescore + 60;
+        }
+
 
     if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0) && k == 1)
 		return 0;
@@ -120,7 +154,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     if(DEBUG)
         printf("returning 10^%d", k-1);
-	return pow(10, k-1);
+	return pow(7, k-1);
 
 }
 
@@ -138,6 +172,11 @@ int findscore (struct connect4* copied, BScore BestScore)
     	if(DEBUG)
             printf("row: %d col: %d  ", BestScore.row, BestScore.column);
         int ou = dxdyEval(copied, newRow, newCol, i, 1);
+
+        if(copied->board[newRow][newCol] == copied->board[BestScore.row-DX[i]][BestScore.column-DY[i]] &&
+                copied->board[newRow][newCol] == copied->whoseTurn)
+            temp+=15;
+
         if(DEBUG)
             printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
     	 temp += ou;
