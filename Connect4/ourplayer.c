@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "ourplayer.h"
-#define DEBUG 0
+#define DEBUG 1
 
 BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 {
@@ -13,8 +13,8 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
     finalsay.score = BestScore.score;
     finalsay.column = BestScore.column;
     if(!turnour)
-        finalsay.score = -1000;
-    else finalsay.score = 1000;
+        finalsay.score = -3000;
+    else finalsay.score = 3000;
 
     for(column=0;column<7;column++)
     {
@@ -43,7 +43,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             if(finalsay.score < BestScore.score && turnour == 0)
             {
                 finalsay.score = BestScore.score;
-                BestScore.column = BestScore.column;
+                finalsay.column = BestScore.column;
             }
 
             else if(finalsay.score > BestScore.score && turnour == 1)
@@ -71,8 +71,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             {
                 if(finalsay.score < temp.score)
                 {
-                	if(DEBUG)
-                        printf("Made it 1st if\n");
                     finalsay.score = temp.score;
                     finalsay.column = column;
                 }
@@ -80,8 +78,6 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             }
             else if(finalsay.score > temp.score)
             {
-            	if(DEBUG)
-                    printf("Made it here as well to the else if\n");
                 finalsay.score = temp.score;
                 finalsay.column = column;
             }
@@ -91,7 +87,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
     }
 
     if(DEBUG)
-        printf("This is the best column to move: %d with score %d for: %c\n\n", finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
+        printf("k This is the best column to move: %d with score %d for: %c\n\n", finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
     return finalsay;
 }
 
@@ -112,8 +108,8 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
             tempcol = column - DY[i]*4;
             if ((tempcol >= NUM_COLS || temprow >= NUM_ROWS || tempcol < 0 || row < 0) && k == 1)
             {
-                if(fakescore == 20)
-                    fakescore -= 40;
+                if(fakescore != 0)
+                    fakescore -= 30;
                 else fakescore -= 20;
             }
             else if(copied->board[temprow][tempcol] != '_')
@@ -152,8 +148,6 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
 
-    if(DEBUG)
-        printf("returning 10^%d", k-1);
 	return pow(7, k-1);
 
 }
@@ -169,35 +163,22 @@ int findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-    	if(DEBUG)
-            printf("row: %d col: %d  ", BestScore.row, BestScore.column);
         int ou = dxdyEval(copied, newRow, newCol, i, 1);
 
         if(copied->board[newRow][newCol] == copied->board[BestScore.row-DX[i]][BestScore.column-DY[i]] &&
                 copied->board[newRow][newCol] == copied->whoseTurn)
-            temp+=15;
-
-        if(DEBUG)
-            printf("**Adding %d at DX: %d DY: %d**\n",ou, DX[i], DY[i]);
+            temp+=3;
     	 temp += ou;
-        if(DEBUG)
-            printf("**Adding: %d**\n", temp);
+
     }
 
     if(BestScore.column == 3)
-    {
         temp += 7;
-        if(DEBUG)
-            printf("**Adding 10 because row 3**\n");
-    }
 
 
     else if(BestScore.column == 2 || BestScore.column == 4)
-    {
-        if(DEBUG)
-            printf("**Adding 7 because row 2 || 4\n");
         temp += 4;
-    }
+
 
     if (currentPiece == 'X' && (status == X_WINS))
     	temp = 1000;
@@ -239,8 +220,19 @@ int test_depth(const struct connect4 *game)
     //check for integer best move?
     BScore node = initstruct(game);
 
-     bestmove = checkscore(copied, node, 0).column;
-
+    bestmove = checkscore(copied, node, 0).column;
+    if(DEBUG)
+        printf("end of iteration.\n\n\n");
+    if(not_valid(game, bestmove))
+    {
+        int i;
+        for(i=0;i<NUM_COLS;i++)
+            if(!not_valid(game, i))
+            {
+                bestmove = i;
+                break;
+            }
+    }
     return bestmove;
 }
 
