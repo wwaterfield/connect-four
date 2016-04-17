@@ -1,3 +1,7 @@
+// Jasper Zaporteza and Wyatt Waterfield
+// Connect4 Project
+// COP3502H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "g9_player.h"

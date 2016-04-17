@@ -1,3 +1,7 @@
+// Jasper Zaporteza and Wyatt Waterfield
+// Connect4 Project
+// COP3502H
+
 #ifndef CON4
 #include "con4lib.h"
 #include <math.h>
