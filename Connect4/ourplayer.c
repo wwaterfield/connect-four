@@ -2,10 +2,16 @@
 #include <stdlib.h>
 
 #include "ourplayer.h"
-#define DEBUG 1
+#define DEBUG 0
 
 BScore checkscore(struct connect4* copied, BScore BestScore, int k)
 {
+
+    //1. accidentally hard coded ternary operators
+    //2. at the end of our move, check to see if we automatically lose
+    //if we lose, just go there instead? see test_depth, check for opposite, and bam
+    //3. I'm still not sure why it's glitching, but we can minmax tree it up
+
     int column;
     int turnour = k % 2;
 
@@ -31,7 +37,7 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
         int fakescore = findscore(copied, BestScore);
 
         if(DEBUG)
-            printf("projected score: %d BestScore before addition: %d\n", fakescore, BestScore.score);
+            printf("k: %d projected score: %d BestScore before addition: %d\n", k, fakescore, BestScore.score);
         BestScore.score += fakescore;
 
         if(k == DEPTH)
@@ -66,7 +72,9 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
             //our turn
 
            if(DEBUG)
-                printf("\n\n\ntempscore: %d vs finalscore: %d place: %d turn: %c \n", temp.score, finalsay.score, finalsay.column, (turnour == 0) ? 'O' : 'X');
+                printf("\n\n\ntempscore: %d vs finalscore: %d turn: %c \n", temp.score, finalsay.score, (turnour == 0) ? 'O' : 'X');
+            if(DEBUG)
+                printf("column: %d vs comparedColumn: %d\n", column, finalsay.column);
             if(turnour == 0)
             {
                 if(finalsay.score < temp.score)
@@ -82,18 +90,20 @@ BScore checkscore(struct connect4* copied, BScore BestScore, int k)
                 finalsay.column = column;
             }
         }
+        if(DEBUG)
+                printf("k: %d finalscore now: %d vs Column: %d\n", k, finalsay.score, finalsay.column);
         copied->board[row][column] = '_';
         BestScore.score -= fakescore;
     }
 
     if(DEBUG)
-        printf("k This is the best column to move: %d with score %d for: %c\n\n", finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
+        printf("k: %d This is the best column to move: %d with score %d for: %c\n\n", k, finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
     return finalsay;
 }
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 {
-    if(copied->board[row][column] != copied->whoseTurn)
+    /*if(copied->board[row][column] != copied->whoseTurn)
         if(k==3)
         {
             int fakescore = 0;
@@ -117,7 +127,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
             if(fakescore == 0)
             return 200;
             return fakescore + 60;
-        }
+        }*/
 
 
     if ((column >= NUM_COLS || row >= NUM_ROWS || column < 0 || row < 0) && k == 1)
@@ -132,14 +142,24 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     //if adjacent pieces are next to yours
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
-		return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+    {
+        /*if(copied->board[row+DX[i]][column+DY[i]] != copied->whoseTurn)
+        {
+            if(copied->board[row+DX[i]*2][column+DY[i]*2] != copied->whoseTurn)
+                return 1000;
+            else return 150;
+        }*/
+
+        return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+    }
+
     /*
     if (k == 2 && currentPos != copied->whoseTurn && currentPos != '_')
 		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 30 + odd;
     if (k == 3 && currentPos != copied->whoseTurn && currentPos != '_')
 		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + 400 + odd;*/
 
-    //if your piece is next to the place pieced, return a power of 4
+    //if your piece is next to the place pieced, return a power of 7
 	else if (currentPos == copied->whoseTurn)
 		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
     //if you have a blank spot, keep going to see if there's a potential row
