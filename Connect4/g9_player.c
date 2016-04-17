@@ -136,14 +136,7 @@ int g9_dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
     // If adjacent pieces are next to yours
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
     {
-        /*if(copied->board[row+DX[i]][column+DY[i]] != copied->whoseTurn)
-        {
-            if(copied->board[row+DX[i]*2][column+DY[i]*2] != copied->whoseTurn)
-                return 1000;
-            else return 150;
-        }*/
-
-        return /*g9_dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+        return 2 + odd;
     }
 
     // If your piece is next to the place pieced, return a power of 7
@@ -177,13 +170,12 @@ int g9_findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-        int ou = g9_dxdyEval(copied, newRow, newCol, i, 1);
+        int tempVal = g9_dxdyEval(copied, newRow, newCol, i, 1);
 
         if(copied->board[newRow][newCol] == copied->board[BestScore.row-DX[i]][BestScore.column-DY[i]] &&
                 copied->board[newRow][newCol] == copied->whoseTurn)
-            temp+=3;
-    	 temp += ou;
-
+        	temp+=3;
+    	 temp += tempVal;
     }
 
     // Ensure extra points for the middle position.
