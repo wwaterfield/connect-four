@@ -22,6 +22,7 @@ typedef struct BestScore {
 
 BScore g9_initstruct(const struct connect4* game);
 BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k);
+int g9_dxdyEval(struct connect4 *copied, int row, int column, int i, int k);
 int g9_findscore (struct connect4* copied, BScore BestScore);
 int g9_test_depth(const struct connect4 *game);
 int g9_move(const struct connect4 *game, int secondsLeft);

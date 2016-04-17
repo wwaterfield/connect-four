@@ -4,7 +4,6 @@
 
 BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 {
-
 	// Declaring Variables.
     int column;
     int turnour = k % 2;
@@ -89,7 +88,7 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
      return finalsay;
 }
 
-int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
+int g9_dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 {
     if(copied->board[row][column] != copied->whoseTurn)
     {
@@ -144,21 +143,21 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
             else return 150;
         }*/
 
-        return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+        return /*g9_dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
     }
 
     // If your piece is next to the place pieced, return a power of 7
 	else if (currentPos == copied->whoseTurn)
-		return dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
+		return g9_dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) + odd;
 
     // If you have a blank spot, keep going to see if there's a potential row
-    else if (currentPos == '_') return dxdyEval(copied, row+DX[i], column+DY[i], i, k);
+    else if (currentPos == '_') return g9_dxdyEval(copied, row+DX[i], column+DY[i], i, k);
 
     // If you hit a dead end after moving in a direction for a few,
 	// turn around and count the real score.
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
     {
-        return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
+        return g9_dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
     }
 
 	return pow(7, k-1);
@@ -178,7 +177,7 @@ int g9_findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-        int ou = dxdyEval(copied, newRow, newCol, i, 1);
+        int ou = g9_dxdyEval(copied, newRow, newCol, i, 1);
 
         if(copied->board[newRow][newCol] == copied->board[BestScore.row-DX[i]][BestScore.column-DY[i]] &&
                 copied->board[newRow][newCol] == copied->whoseTurn)

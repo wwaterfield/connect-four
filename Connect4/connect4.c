@@ -18,7 +18,7 @@
 #include "firstavailable.h"
 #endif
 
-#ifndef OURPLAYER
+#ifndef G9_PLAYER
 #include "g9_player.h"
 #endif
 
