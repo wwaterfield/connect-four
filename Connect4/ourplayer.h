@@ -7,7 +7,7 @@
 #define DEPTH 3
 
 // Checks the possible directions
-const int DX_SIZE = 8;
+const int DX_SIZE = 7;
 const int DX[] = {-1, 0, 1, -1, -1, 0, 1,-1};
 const int DY[] = {-1, -1, -1, 0, 1, 1, 1,0};
 

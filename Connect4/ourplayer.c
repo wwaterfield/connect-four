@@ -209,7 +209,6 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	// turn around and count the real score.
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
     {
-    	printf("********DX THINGY: %d\n", DX_SIZE-1 -i);
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
     }
 
@@ -285,7 +284,7 @@ BScore g9_initstruct(const struct connect4* game)
 // Helper function used in evaluating possible game outcomes.
 int g9_test_depth(const struct connect4 *game)
 {
-    int bestmove;
+    int bestmove, column;
     struct connect4* copied = copy(game);
 
     BScore node = g9_initstruct(game);
@@ -303,6 +302,29 @@ int g9_test_depth(const struct connect4 *game)
                 break;
             }
     }
+
+    // Overide for easy wins/losses.
+    for (column = 0; column < NUM_COLS; column++) {
+
+    	char currentPiece, temp;
+    	int row = get_row(copied, column);
+    	temp = copied->board[row][column];
+
+    	// Temporarily place the opposite piece
+    	currentPiece = (game->whoseTurn == 'X') ? 'O' : 'X';
+    	copied->board[row][column] = currentPiece;
+
+    	// If a move will result in an immediate loss for our player, override bestmove.
+    	int status = check_status(copied);
+		if (currentPiece == 'X' && (status == X_WINS))
+			bestmove = column;
+		if (currentPiece == 'O' && (status == O_WINS))
+			bestmove = column;
+
+		// Reset board position.
+		copied->board[row][column] = temp;
+    }
+
     return bestmove;
 }
 
