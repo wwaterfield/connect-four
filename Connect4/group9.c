@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "g9_player.h"
+#include "group9.h"
 
 BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 {

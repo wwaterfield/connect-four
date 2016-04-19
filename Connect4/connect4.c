@@ -19,7 +19,7 @@
 #endif
 
 #ifndef G9_PLAYER
-#include "g9_player.h"
+#include "group9.h"
 #endif
 
 int main() {
@@ -43,9 +43,9 @@ int main() {
 
 	        // Time and retrieve the current computer player's move.
 	        timespent = time(0);
-	        //scanf("%d", &curmove);
+	        scanf("%d", &curmove);
             //curmove = arup_move(&game, Xtime);
-	        curmove = g9_move(&game, Xtime);
+	        //curmove = g9_move(&game, Xtime);
 	        timespent = time(0) - timespent;
 	        Xtime -= timespent;
 
