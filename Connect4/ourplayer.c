@@ -59,7 +59,7 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 
         if(DEBUG)
             printf("k: %d projected score: %d BestScore before addition: %d\n", k, fakescore, BestScore.score);
-        BestScore.score += fakescore;
+        BestScore.score = fakescore;
 
         if(k == DEPTH)
         {
@@ -69,16 +69,16 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
                 printf("column: %d  vs Comparecol: %d, turn: %c\n", finalsay.column, BestScore.column, (turnour == 0) ? 'O' : 'X');
 
             // If it is the other player's turn, assign finalSay the most negative score.
-            if(finalsay.score < BestScore.score && turnour == 0)
+            if(finalsay.score < fakescore && turnour == 0)
             {
-                finalsay.score = BestScore.score;
+                finalsay.score = fakescore;
                 finalsay.column = column;
             }
 
             // If it is our player's turn, assign finalSay the greatest positive score.
-            else if(finalsay.score > BestScore.score && turnour == 1)
+            else if(finalsay.score > fakescore && turnour == 1)
             {
-                finalsay.score = BestScore.score;
+                finalsay.score = fakescore;
                 finalsay.column = column;
             }
 
@@ -125,11 +125,11 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
         // Reset the game board back to its original position
         // in order to test it again.
         copied->board[row][column] = '_';
-        BestScore.score -= fakescore;
     }
 
     if(DEBUG)
         printf("k: %d This is the best column to move: %d with score %d for: %c\n\n", k, finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
+    finalsay.score += fakescore;
     return finalsay;
 }
 
