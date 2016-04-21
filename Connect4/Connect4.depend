@@ -15,7 +15,7 @@
 1460770601 source:c:\users\areax\documents\git\connect4\connect4\con4lib.c
 	"con4lib.h"
 
-1460776182 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
+1461267957 source:c:\users\areax\documents\git\connect4\connect4\connect4.c
 	<stdlib.h>
 	<stdio.h>
 	"con4lib.h"
@@ -26,15 +26,16 @@
 1460776101 c:\users\areax\documents\git\connect4\connect4\firstavailable.h
 	"con4lib.h"
 
-1460778586 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
+1461269758 c:\users\areax\documents\git\connect4\connect4\ourplayer.h
 	"con4lib.h"
 	<math.h>
 
 1460776101 source:c:\users\areax\documents\git\connect4\connect4\firstavailable.c
 	"firstavailable.h"
 
-1460778515 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
+1461269472 source:c:\users\areax\documents\git\connect4\connect4\ourplayer.c
 	<stdio.h>
 	<stdlib.h>
+	<math.h>
 	"ourplayer.h"
 

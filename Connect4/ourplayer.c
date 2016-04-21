@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "ourplayer.h"
 #define DEBUG 0
 
@@ -71,14 +72,14 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
             if(finalsay.score < BestScore.score && turnour == 0)
             {
                 finalsay.score = BestScore.score;
-                finalsay.column = BestScore.column;
+                finalsay.column = column;
             }
 
             // If it is our player's turn, assign finalSay the greatest positive score.
             else if(finalsay.score > BestScore.score && turnour == 1)
             {
                 finalsay.score = BestScore.score;
-                finalsay.column = BestScore.column;
+                finalsay.column = column;
             }
 
             if(DEBUG)
@@ -209,7 +210,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	// turn around and count the real score.
     else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
     {
-    	printf("********DX THINGY: %d\n", DX_SIZE-1 -i);
+    	if(DEBUG) printf("********DX THINGY: %d\n", DX_SIZE-1 -i);
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
     }
 
@@ -293,6 +294,7 @@ int g9_test_depth(const struct connect4 *game)
     bestmove = g9_checkscore(copied, node, 0).column;
     if(DEBUG)
         printf("end of iteration.\n\n\n");
+        /*
     if(not_valid(game, bestmove))
     {
         int i;
@@ -302,7 +304,7 @@ int g9_test_depth(const struct connect4 *game)
                 bestmove = i;
                 break;
             }
-    }
+    }*/
     return bestmove;
 }
 
