@@ -8,8 +8,8 @@
 
 // Checks the possible directions
 const int DX_SIZE = 8;
-const int DX[] = {-1, 0, 1, -1, -1, 0, 1,-1};
-const int DY[] = {-1, -1, -1, 0, 1, 1, 1,0};
+const int DX[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+const int DY[] = {-1, -1, -1, 0, 0, 1, 1, 1};
 
 #endif // CON4
 

@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include "ourplayer.h"
+
 #define DEBUG 0
+
 
 BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 {
@@ -136,6 +138,7 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 
 int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 {
+    int odd = (i == 1 || i == 5) ? 3 : 0;
     if(copied->board[row][column] != copied->whoseTurn)
     {
         if(k==3)
@@ -165,7 +168,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
             if(fakescore == 0)
             	return 300;
-            return fakescore + 30;
+            return fakescore + 55+odd*8;
         }
     }
 
@@ -179,7 +182,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	char currentPos = copied->board[row][column];
 
     // Not straight down.
-	int odd = (i == 1 || i == 5) ? 3 : 0;
+
 
     // If adjacent pieces are next to yours
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
@@ -191,7 +194,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
             else return 150;
         }*/
 
-        return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 2 + odd;
+        return /*dxdyEval(copied, row+DX[i], column+DY[i], i, k+1) +*/ 4 + odd;
     }
 
     /*
@@ -209,13 +212,13 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 
     // If you hit a dead end after moving in a direction for a few,
 	// turn around and count the real score.
-    else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 3)
+    else if (currentPos != copied->whoseTurn && currentPos != '_' && i < 4)
     {
     	if(DEBUG) printf("********DX THINGY: %d\n", DX_SIZE-1 -i);
         return dxdyEval(copied, row+DX[i], column+DY[i], DX_SIZE - 1 - i, 0);
     }
 
-	return pow(7, k-1);
+	return pow(7, k-1) + odd;
 
 }
 
@@ -241,11 +244,11 @@ int g9_findscore (struct connect4* copied, BScore BestScore)
 
     // Ensure extra points for the middle position.
     if(BestScore.column == 3)
-        temp += 7;
+        temp += 6;
 
     // If the middle is not available, columns close to the middle are preferred.
     else if(BestScore.column == 2 || BestScore.column == 4)
-        temp += 4;
+        temp += 2;
 
     // Take immediate action if a move results in either a win or a loss.
     if (currentPiece == 'X' && (status == X_WINS))
