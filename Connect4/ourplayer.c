@@ -59,7 +59,7 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
 
         if(DEBUG)
             printf("k: %d projected score: %d BestScore before addition: %d\n", k, fakescore, BestScore.score);
-        BestScore.score = fakescore;
+        BestScore.score += fakescore;
 
         if(k == DEPTH)
         {
@@ -71,15 +71,15 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
             // If it is the other player's turn, assign finalSay the most negative score.
             if(finalsay.score < fakescore && turnour == 0)
             {
-                finalsay.score = fakescore;
-                finalsay.column = column;
+                finalsay.score = BestScore.score;
+                finalsay.column = BestScore.column;
             }
 
             // If it is our player's turn, assign finalSay the greatest positive score.
             else if(finalsay.score > fakescore && turnour == 1)
             {
-                finalsay.score = fakescore;
-                finalsay.column = column;
+                finalsay.score = BestScore.score;
+                finalsay.column = BestScore.column;
             }
 
             if(DEBUG)
@@ -125,11 +125,12 @@ BScore g9_checkscore(struct connect4* copied, BScore BestScore, int k)
         // Reset the game board back to its original position
         // in order to test it again.
         copied->board[row][column] = '_';
+         BestScore.score += fakescore;
     }
 
     if(DEBUG)
         printf("k: %d This is the best column to move: %d with score %d for: %c\n\n", k, finalsay.column, finalsay.score, (turnour == 0) ? 'O' : 'X');
-    finalsay.score += fakescore;
+    //finalsay.score += fakescore;
     return finalsay;
 }
 
@@ -163,8 +164,8 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
                 fakescore -= 15;
 
             if(fakescore == 0)
-            	return 200;
-            return fakescore + 60;
+            	return 300;
+            return fakescore + 30;
         }
     }
 
@@ -178,7 +179,7 @@ int dxdyEval(struct connect4 *copied, int row, int column, int i, int k)
 	char currentPos = copied->board[row][column];
 
     // Not straight down.
-	int odd = (i == 1 || i == 5) ? 6 : 0;
+	int odd = (i == 1 || i == 5) ? 3 : 0;
 
     // If adjacent pieces are next to yours
 	if (k == 1 && currentPos != copied->whoseTurn && currentPos != '_')
@@ -231,13 +232,11 @@ int g9_findscore (struct connect4* copied, BScore BestScore)
     {
     	int newRow = BestScore.row + DX[i];
     	int newCol = BestScore.column + DY[i];
-        int ou = dxdyEval(copied, newRow, newCol, i, 1);
+        temp += dxdyEval(copied, newRow, newCol, i, 1);
 
         if(copied->board[newRow][newCol] == copied->board[BestScore.row-DX[i]][BestScore.column-DY[i]] &&
                 copied->board[newRow][newCol] == copied->whoseTurn)
             temp+=3;
-    	 temp += ou;
-
     }
 
     // Ensure extra points for the middle position.
@@ -294,7 +293,7 @@ int g9_test_depth(const struct connect4 *game)
     bestmove = g9_checkscore(copied, node, 0).column;
     if(DEBUG)
         printf("end of iteration.\n\n\n");
-        /*
+
     if(not_valid(game, bestmove))
     {
         int i;
@@ -304,7 +303,7 @@ int g9_test_depth(const struct connect4 *game)
                 bestmove = i;
                 break;
             }
-    }*/
+    }
     return bestmove;
 }
 
